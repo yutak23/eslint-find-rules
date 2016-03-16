@@ -5,7 +5,8 @@
 // Prints rules recognized by ESLint that don't appear in the given config
 // preset. It helps with upgrading the preset when new ESLint gets released.
 var path = require('path')
-var findNewRules = require('.')
+var isAbsolute = require('path-is-absolute')
+var findNewRules = require('./index')
 
 var currentRules = Object.keys(getConfig().rules)
 var newRules = findNewRules(currentRules)
@@ -19,7 +20,7 @@ function getConfig() {
   var specifiedFile = process.argv[2]
   if (specifiedFile) {
     // this is being called like: eslint-find-new-rules eslint-config-mgol
-    if (path.isAbsolute(specifiedFile)) {
+    if (isAbsolute(specifiedFile)) {
       return require(specifiedFile)
     } else {
       return require(path.join(process.cwd(), specifiedFile))

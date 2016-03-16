@@ -1,6 +1,6 @@
 import mock from 'mock-fs'
 import test from 'ava'
-import findNewRules from '.'
+import findNewRules from './index'
 
 try {
   require('./bin') // requiring now for coverage until this is tested

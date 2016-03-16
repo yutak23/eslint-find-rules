@@ -6,7 +6,9 @@ module.exports = findNewRules
 function findNewRules(currentRules) {
   var allRules = fs
     .readdirSync('./node_modules/eslint/lib/rules')
-    .map(filename => filename.replace(/\.js$/, ''))
+    .map(function removeJsFromFilename(filename) {
+      return filename.replace(/\.js$/, '')
+    })
 
   return difference(allRules, currentRules)
 }
