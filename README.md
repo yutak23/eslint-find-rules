@@ -1,6 +1,6 @@
 # eslint-find-new-rules
 
-Use this for your own [ESLint](http://eslint.org/) [sharable configuration](http://eslint.org/docs/developer-guide/shareable-configs)
+Use this for your own [ESLint](http://eslint.org/) [shareable configuration](http://eslint.org/docs/developer-guide/shareable-configs)
 to identify built-in ESLint rules that you're not explicitly configuring.
 
 [![Build Status](https://img.shields.io/travis/kentcdodds/eslint-find-new-rules.svg?style=flat-square)](https://travis-ci.org/kentcdodds/eslint-find-new-rules)
@@ -21,7 +21,7 @@ The intended usage is as an npm script:
 {
   ...
   "scripts": {
-    "find-new-rules": "eslint-find-new-rules eslint-config-yourconfigname"
+    "find-new-rules": "eslint-find-new-rules eslint-config-yourConfigName"
   }
   ...
 }
@@ -37,7 +37,7 @@ This is really handy in an actual config module (like [mine](https://github.com/
 eslint-find-new-rules ./index.js
 ```
 
-This is resolved relative to the `process.cwd()` which, in the context of npm scripts is always the location of you `package.json`.
+This is resolved relative to the `process.cwd()` which, in the context of npm scripts is always the location of your `package.json`.
 
 ### Absolute Path
 
