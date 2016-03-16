@@ -5,10 +5,11 @@
 // Prints rules recognized by ESLint that don't appear in the given config
 // preset. It helps with upgrading the preset when new ESLint gets released.
 var path = require('path')
+var eslint = require('eslint')
 var isAbsolute = require('path-is-absolute')
 var findNewRules = require('./index')
 
-var currentRules = Object.keys(getConfig().rules)
+var currentRules = getRules()
 var newRules = findNewRules(currentRules)
 
 if (newRules.length) {
@@ -16,18 +17,35 @@ if (newRules.length) {
   process.exit(1)
 }
 
-function getConfig() {
+function getConfigFile() {
   var specifiedFile = process.argv[2]
   if (specifiedFile) {
     // this is being called like: eslint-find-new-rules eslint-config-mgol
     if (isAbsolute(specifiedFile)) {
-      return require(specifiedFile)
+      return specifiedFile
     } else {
-      return require(path.join(process.cwd(), specifiedFile))
+      return path.join(process.cwd(), specifiedFile)
     }
   } else {
     // this is not being called with an arg. Use the package.json `main`
-    return require(process.cwd())
+    return path.join(process.cwd(), 'package.json')
   }
 }
 
+function getConfig(configFile) {
+  var cliEngine = new eslint.CLIEngine({
+    // ignore any config applicable depending on the location on the filesystem
+    useEslintrc: false,
+    // point to the particular config
+    configFile,
+  })
+  var config = cliEngine.getConfigForFile(configFile)
+  return config
+}
+
+function getRules() {
+  var configFile = getConfigFile()
+  var config = getConfig(configFile)
+  var rules = Object.keys(config.rules)
+  return rules
+}
