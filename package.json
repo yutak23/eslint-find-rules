@@ -1,0 +1,67 @@
+{
+  "name": "eslint-find-new-rules",
+  "version": "0.0.0-semantically-released",
+  "description": "Use this to save yourself some time when working on a webpack configuration.",
+  "main": "index.js",
+  "scripts": {
+    "cover": "nyc --reporter=lcov --reporter=text npm t",
+    "test": "ava",
+    "lint": "eslint .",
+    "check-kentcdodds": "./bin.js eslint-config-kentcdodds",
+    "commit": "git-cz",
+    "validate": "npm-run-all --parallel lint cover --sequential check-coverage",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "check-coverage": "nyc check-coverage --statements 71 --branches 33 --functions 100 --lines 71",
+    "report-coverage": "cat ./coverage/lcov.info | node_modules/.bin/codecov"
+  },
+  "bin": {
+    "eslint-find-new-rules": "bin.js"
+  },
+  "keywords": [],
+  "author": "Michał Gołębiowski <m.goleb@gmail.com>",
+  "contributors": [
+    "Kent C. Dodds <kent@doddsfamily.us> (http://kentcdodds.com/)"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "lodash.difference": "4.1.1"
+  },
+  "devDependencies": {
+    "ava": "0.13.0",
+    "codecov": "1.0.1",
+    "commitizen": "2.7.2",
+    "cz-conventional-changelog": "1.1.5",
+    "eslint": "2.4.0",
+    "eslint-config-kentcdodds": "6.0.0",
+    "ghooks": "1.0.3",
+    "mock-fs": "3.8.0",
+    "npm-run-all": "1.5.3",
+    "nyc": "6.1.1",
+    "semantic-release": "^4.3.5",
+    "validate-commit-msg": "2.4.0"
+  },
+  "eslintConfig": {
+    "extends": "kentcdodds",
+    "parserOptions": {
+      "ecmaVersion": 5
+    },
+    "rules": {
+      "no-var": 0
+    }
+  },
+  "config": {
+    "commig-msg": "validate-commit-msg",
+    "pre-commit": "npm run validate",
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kentcdodds/eslint-find-new-rules.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kentcdodds/eslint-find-new-rules/issues"
+  },
+  "homepage": "https://github.com/kentcdodds/eslint-find-new-rules#readme"
+}
