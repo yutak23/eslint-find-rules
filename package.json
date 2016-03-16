@@ -8,6 +8,7 @@
     "test": "ava",
     "lint": "eslint .",
     "check-kentcdodds": "./bin.js eslint-config-kentcdodds",
+    "update-contributors": "all-contributors generate",
     "commit": "git-cz",
     "validate": "npm-run-all --parallel lint cover --sequential check-coverage",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
@@ -28,6 +29,7 @@
     "path-is-absolute": "1.0.0"
   },
   "devDependencies": {
+    "all-contributors-cli": "2.0.0-beta3",
     "ava": "0.13.0",
     "codecov": "1.0.1",
     "commitizen": "2.7.2",

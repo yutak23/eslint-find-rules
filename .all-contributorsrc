@@ -1,0 +1,25 @@
+{
+  "projectOwner": "kentcdodds",
+  "projectName": "eslint-find-new-rules",
+  "imageSize": 100,
+  "contributors": [
+    {
+      "login": "kentcdodds",
+      "name": "Kent C. Dodds",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1500684?v=3",
+      "html_url": "https://twitter.com/kentcdodds",
+      "contributions": [
+        "code", "doc", "test"
+      ]
+    },
+    {
+      "login": "mgol",
+      "name": "Michał Gołębiowski",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1758366?v=3",
+      "html_url": "https://github.com/mgol",
+      "contributions": [
+        "code"
+      ]
+    }
+  ]
+}
