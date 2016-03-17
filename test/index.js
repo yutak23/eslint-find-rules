@@ -1,25 +1,10 @@
-import mock from 'mock-fs'
+import proxyquire from 'proxyquire'
 import test from 'ava'
-import findNewRules from './index'
 
-try {
-  require('./bin') // requiring now for coverage until this is tested
-} catch (error) {
-  // ignore the inevitable error
-}
-
-test.before(() => {
-  mock({
-    './node_modules/eslint/lib/rules': {
-      'foo-rule.js': '',
-      'bar-rule.js': '',
-      'baz-thing.js': '',
-    },
-  })
-})
-
-test.after(() => {
-  mock.restore()
+const findNewRules = proxyquire('../index', {
+  fs: {
+    readdirSync: () => ['foo-rule.js', 'bar-rule.js', 'baz-thing.js'],
+  },
 })
 
 test('returns the difference between what it finds in eslint/lib/rules and the rules array it is passed', t => {
@@ -32,4 +17,3 @@ test('returns an empty array if there is no difference', t => {
   t.true(Array.isArray(missingRules))
   t.same(missingRules.length, 0)
 })
-
