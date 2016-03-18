@@ -12,7 +12,7 @@
     "commit": "git-cz",
     "validate": "npm-run-all --parallel lint cover --sequential check-coverage",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "check-coverage": "nyc check-coverage --statements 71 --branches 33 --functions 100 --lines 71",
+    "check-coverage": "nyc check-coverage --statements 100 --branches 100 --functions 100 --lines 100",
     "report-coverage": "cat ./coverage/lcov.info | node_modules/.bin/codecov"
   },
   "bin": {
