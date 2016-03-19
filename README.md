@@ -51,6 +51,8 @@ You can also provide an absolute path:
 eslint-find-new-rules ~/Developer/eslint-config-kentcdodds/index.js
 ```
 
+**Please note** that any tested ESLint config file must reside below your project's root.
+
 ### Default to `main`
 
 It will also default to the `main` in your `package.json`, so you can omit the argument altogether:
