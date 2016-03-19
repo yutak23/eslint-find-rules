@@ -43,6 +43,9 @@
     "semantic-release": "4.3.5",
     "validate-commit-msg": "2.4.0"
   },
+  "peerDependencies": {
+    "eslint": "^2.0.0"
+  },
   "eslintConfig": {
     "extends": "kentcdodds",
     "parserOptions": {

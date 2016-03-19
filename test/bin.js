@@ -6,8 +6,10 @@ let rules = []
 const processCwd = process.cwd
 const processExit = process.exit
 const consoleLog = console.log // eslint-disable-line no-console
-const specifiedFile = './fixtures/.eslintrc'
+const noSpecifiedFile = path.resolve(process.cwd(), './fixtures/no-path')
+const specifiedFile = './fixtures/.eslintrc.js'
 const mainFile = path.join(process.cwd(), specifiedFile)
+const extendingFile = './fixtures/extending-config.json'
 const indexStub = {
   './index': () => rules,
 }
@@ -38,7 +40,7 @@ test('no new rule and relative path', () => {
 })
 
 test('no new rule and no path', () => {
-  process.cwd = () => mainFile
+  process.cwd = () => noSpecifiedFile
   proxyquire('../bin', indexStub)
 })
 
@@ -56,6 +58,12 @@ test('new rule and relative path', () => {
 
 test('new rule and no path', () => {
   rules = ['foo', 'bar', 'baz']
-  process.cwd = () => mainFile
+  process.cwd = () => noSpecifiedFile
+  proxyquire('../bin', indexStub)
+})
+
+test('new rule (extending)', () => {
+  rules = ['comma-dangle', 'no-console', 'no-alert']
+  process.argv[2] = extendingFile
   proxyquire('../bin', indexStub)
 })

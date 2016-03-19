@@ -13,6 +13,14 @@ to identify built-in ESLint rules that you're not explicitly configuring.
 [![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
+## Installation
+
+Simply install locally as a development dependency to your project's package:
+
+```
+npm install --save-dev eslint-find-new-rules
+```
+
 ## Usage
 
 The intended usage is as an npm script:
@@ -39,6 +47,8 @@ eslint-find-new-rules ./index.js
 
 This is resolved relative to the `process.cwd()` which, in the context of npm scripts is always the location of your `package.json`.
 
+You may specify any [config format supported by ESLint](http://eslint.org/docs/user-guide/configuring).
+
 ### Absolute Path
 
 You can also provide an absolute path:
@@ -46,6 +56,8 @@ You can also provide an absolute path:
 ```
 eslint-find-new-rules ~/Developer/eslint-config-kentcdodds/index.js
 ```
+
+**Please note** that any tested ESLint config file must reside below your project's root.
 
 ### Default to `main`
 
@@ -72,4 +84,3 @@ Special thanks to [@mgol](https://github.com/mgol) who created the original scri
 ## LICENSE
 
 MIT
-

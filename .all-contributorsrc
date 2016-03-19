@@ -29,6 +29,15 @@
       "contributions": [
         "test"
       ]
+    },
+    {
+      "login": "ta2edchimp",
+      "name": "Andreas Windt",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/262436?v=3",
+      "html_url": "https://twitter.com/ta2edchimp",
+      "contributions": [
+        "code", "doc", "test"
+      ]
     }
   ]
 }
