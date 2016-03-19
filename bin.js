@@ -32,14 +32,14 @@ function getConfigFile() {
   }
 }
 
-function getConfig(configFile) {
+function getConfig(file) {
   var cliEngine = new eslint.CLIEngine({
     // ignore any config applicable depending on the location on the filesystem
     useEslintrc: false,
     // point to the particular config
-    configFile,
+    configFile: file,
   })
-  var config = cliEngine.getConfigForFile(configFile)
+  var config = cliEngine.getConfigForFile(file)
   return config
 }
 
