@@ -39,6 +39,10 @@ eslint-find-new-rules ./index.js
 
 This is resolved relative to the `process.cwd()` which, in the context of npm scripts is always the location of your `package.json`.
 
+#### Supported file types
+
+You may specify any [config file originally supported by ESLint](http://eslint.org/docs/user-guide/configuring) (`.eslintrc.*` or a `package.json` containing an `eslintConfig` field) as well as any JavaScript, JSON or YAML file containing a proper eslint configuration.
+
 ### Absolute Path
 
 You can also provide an absolute path:
@@ -72,4 +76,3 @@ Special thanks to [@mgol](https://github.com/mgol) who created the original scri
 ## LICENSE
 
 MIT
-
