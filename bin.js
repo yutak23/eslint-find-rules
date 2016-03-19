@@ -17,6 +17,12 @@ if (newRules.length) {
   process.exit(1)
 }
 
+function resolvePackagesMain(cwd, packageFile) {
+  var packageFilePath = path.join(cwd, packageFile)
+  var packageJson = require(packageFilePath)
+  return packageJson.main
+}
+
 function getConfigFile() {
   var specifiedFile = process.argv[2]
   if (specifiedFile) {
@@ -28,7 +34,7 @@ function getConfigFile() {
     }
   } else {
     // this is not being called with an arg. Use the package.json `main`
-    return path.join(process.cwd(), 'package.json')
+    return resolvePackagesMain(process.cwd(), 'package.json')
   }
 }
 
