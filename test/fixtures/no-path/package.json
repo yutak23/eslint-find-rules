@@ -1,0 +1,11 @@
+{
+  "name": "fake-project",
+  "version": "0.0.0",
+  "description": "Simulating a project's package.json.",
+  "private": true,
+  "eslintConfig": {
+    "rules": {
+      "no-console": [2]
+    }
+  }
+}
