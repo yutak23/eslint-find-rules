@@ -13,6 +13,14 @@ to identify built-in ESLint rules that you're not explicitly configuring.
 [![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
+## Installation
+
+Simply install locally as a development dependency to your project's package:
+
+```
+npm install --save-dev eslint-find-new-rules
+```
+
 ## Usage
 
 The intended usage is as an npm script:
