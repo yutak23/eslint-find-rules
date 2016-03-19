@@ -10,7 +10,7 @@ to identify built-in ESLint rules that you're not explicitly configuring.
 [![MIT License](https://img.shields.io/npm/l/eslint-find-new-rules.svg?style=flat-square)](http://opensource.org/licenses/MIT)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Installation
@@ -72,8 +72,8 @@ eslint-find-new-rules
 Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-| [![Kent C. Dodds](https://avatars3.githubusercontent.com/u/1500684?v=3&s=100)<br /><sub>Kent C. Dodds</sub>]()<br />[💻](https://github.com/kentcdodds/eslint-find-new-rules/commits?author=kentcdodds) [📖](https://github.com/kentcdodds/eslint-find-new-rules/commits?author=kentcdodds) [⚠️](https://github.com/kentcdodds/eslint-find-new-rules/commits?author=kentcdodds) | [![Michał Gołębiowski](https://avatars3.githubusercontent.com/u/1758366?v=3&s=100)<br /><sub>Michał Gołębiowski</sub>]()<br />[💻](https://github.com/kentcdodds/eslint-find-new-rules/commits?author=mgol) |
-| :---: | :---: |
+| [![Kent C. Dodds](https://avatars3.githubusercontent.com/u/1500684?v=3&s=100)<br /><sub>Kent C. Dodds</sub>]()<br />[💻](https://github.com/kentcdodds/eslint-find-new-rules/commits?author=kentcdodds) [📖](https://github.com/kentcdodds/eslint-find-new-rules/commits?author=kentcdodds) [⚠️](https://github.com/kentcdodds/eslint-find-new-rules/commits?author=kentcdodds) 👀 | [![Michał Gołębiowski](https://avatars3.githubusercontent.com/u/1758366?v=3&s=100)<br /><sub>Michał Gołębiowski</sub>]()<br />[💻](https://github.com/kentcdodds/eslint-find-new-rules/commits?author=mgol) | [![Sarbbottam Bandyopadhyay](https://avatars1.githubusercontent.com/u/949380?v=3&s=100)<br /><sub>Sarbbottam Bandyopadhyay</sub>]()<br />[⚠️](https://github.com/kentcdodds/eslint-find-new-rules/commits?author=sarbbottam) 👀 | [![Andreas Windt](https://avatars1.githubusercontent.com/u/262436?v=3&s=100)<br /><sub>Andreas Windt</sub>]()<br />[💻](https://github.com/kentcdodds/eslint-find-new-rules/commits?author=ta2edchimp) [📖](https://github.com/kentcdodds/eslint-find-new-rules/commits?author=ta2edchimp) [⚠️](https://github.com/kentcdodds/eslint-find-new-rules/commits?author=ta2edchimp) |
+| :---: | :---: | :---: | :---: |
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification.
