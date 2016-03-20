@@ -62,7 +62,6 @@ test('determine config, rules and plugins, relative path', t => {
   t.true(typeof retrievedConfig.rules === 'object', 'config object should contain rules')
   t.same(retrievedRules, expectedRuleSet, 'retrieved rules should equal expected rules')
 
-  t.true(Array.isArray(retrievedConfig.plugins), 'config object should contain plugins')
   t.same(retrievedConfig.plugins, ['react'], 'retrieved plugins should contain only "react"')
   t.same(possiblePluginRules, expectedPluginRuleSet, 'retrieved plugin rules should equal expected plugin rules')
 })
@@ -80,7 +79,6 @@ test('determine config, rules and plugins, absolute path', t => {
   t.true(typeof retrievedConfig.rules === 'object', 'config object should contain rules')
   t.same(retrievedRules, expectedRuleSet, 'retrieved rules should equal expected rules')
 
-  t.true(Array.isArray(retrievedConfig.plugins), 'config object should contain plugins')
   t.same(retrievedConfig.plugins, ['react'], 'retrieved plugins should contain only "react"')
   t.same(possiblePluginRules, expectedPluginRuleSet, 'retrieved plugin rules should equal expected plugin rules')
 })
