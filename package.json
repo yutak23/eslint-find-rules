@@ -6,7 +6,7 @@
   "scripts": {
     "cover": "nyc --reporter=lcov --reporter=text ava",
     "test": "ava",
-    "lint": "eslint .",
+    "lint": "eslint --ignore-pattern test/fixtures .",
     "check-kentcdodds": "./bin.js eslint-config-kentcdodds",
     "update-contributors": "all-contributors generate",
     "commit": "git-cz",
@@ -36,7 +36,6 @@
     "cz-conventional-changelog": "1.1.5",
     "eslint": "2.4.0",
     "eslint-config-kentcdodds": "6.0.0",
-    "eslint-plugin-react": "^4.2.3",
     "ghooks": "1.0.3",
     "npm-run-all": "1.5.3",
     "nyc": "6.1.1",
