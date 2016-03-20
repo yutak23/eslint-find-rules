@@ -55,6 +55,11 @@
       "no-var": 0
     }
   },
+  "nyc": {
+    "exclude": [
+      "test/**/*"
+    ]
+  },
   "config": {
     "commig-msg": "validate-commit-msg",
     "pre-commit": "npm run validate",
