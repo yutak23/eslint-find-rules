@@ -71,6 +71,7 @@ function getPluginRules(conf) {
     plugins.forEach(function normalizePluginRule(plugin) {
       var thisPluginsConfig = require('eslint-plugin-' + plugin)
       var thisPluginsRules = thisPluginsConfig.rules
+      /* istanbul ignore next */
       if (typeof thisPluginsRules === 'object') {
         rules = rules.concat(Object.keys(thisPluginsRules).map(mapPluginRuleNames(plugin)))
       }
