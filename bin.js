@@ -9,8 +9,13 @@ var eslint = require('eslint')
 var isAbsolute = require('path-is-absolute')
 var findNewRules = require('./index')
 
-var currentRules = getRules()
-var newRules = findNewRules(currentRules)
+var configFile = getConfigFile()
+var config = getConfig(configFile)
+
+var currentRules = getCurrentRules(config)
+var pluginRules = getPluginRules(config)
+
+var newRules = findNewRules(currentRules, pluginRules)
 
 if (newRules.length) {
   console.log('New rules to add to the config: ' + newRules.join(', ') + '.') // eslint-disable-line no-console
@@ -45,13 +50,21 @@ function getConfig(file) {
     // point to the particular config
     configFile: file,
   })
-  var config = cliEngine.getConfigForFile(file)
-  return config
+  return cliEngine.getConfigForFile(file)
 }
 
-function getRules() {
-  var configFile = getConfigFile()
-  var config = getConfig(configFile)
-  var rules = Object.keys(config.rules)
+function getCurrentRules(conf) {
+  var rules = Object.keys(conf.rules)
+  return rules
+}
+
+function getPluginRules(conf) {
+  var rules = []
+  var plugins = conf.plugins
+  if (plugins) {
+    plugins.forEach(function normalizePluginRule(plugin) {
+      rules.concat(require('eslint-plugin-' + plugin).rules)
+    })
+  }
   return rules
 }
