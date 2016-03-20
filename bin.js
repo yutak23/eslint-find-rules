@@ -58,6 +58,12 @@ function getCurrentRules(conf) {
   return rules
 }
 
+function mapPluginRuleNames(plugin) {
+  return function mapPluginNames(rule) {
+    return plugin + '/' + rule
+  }
+}
+
 function getPluginRules(conf) {
   var rules = []
   var plugins = conf.plugins
@@ -66,7 +72,7 @@ function getPluginRules(conf) {
       var thisPluginsConfig = require('eslint-plugin-' + plugin)
       var thisPluginsRules = thisPluginsConfig.rules
       if (typeof thisPluginsRules === 'object') {
-        rules = rules.concat(Object.keys(thisPluginsRules))
+        rules = rules.concat(Object.keys(thisPluginsRules).map(mapPluginRuleNames(plugin)))
       }
     })
   }
