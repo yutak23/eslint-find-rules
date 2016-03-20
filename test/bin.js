@@ -12,6 +12,15 @@ const mainFile = path.join(process.cwd(), specifiedFile)
 const extendingFile = './fixtures/extending-config.json'
 const indexStub = {
   './index': () => rules,
+  'eslint-plugin-react': {
+    rules: {
+      'jsx-uses-react': true,
+      'no-multi-comp': true,
+      'prop-types': true,
+    },
+    '@noCallThru': true,
+    '@global': true,
+  },
 }
 function outputStatement() {
   return `New rules to add to the config: ${rules.join(', ')}.`
