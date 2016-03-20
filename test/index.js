@@ -8,8 +8,8 @@ const findNewRules = proxyquire('../index', {
 })
 
 test('returns the difference between what it finds in eslint/lib/rules and the rules array it is passed', t => {
-  const missingRules = findNewRules(['baz-thing', 'foo-rule'])
-  t.same(missingRules, ['bar-rule'])
+  const missingRules = findNewRules(['baz-thing', 'foo-rule'], ['react-foo'])
+  t.same(missingRules, ['bar-rule', 'react-foo'])
 })
 
 test('returns an empty array if there is no difference', t => {
