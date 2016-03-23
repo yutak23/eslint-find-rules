@@ -19,3 +19,23 @@
 12. Get merged
 13. Celebrate 🎉
 
+## Committing and Pushing changes
+
+As stated earlier, please follow [this convention](https://github.com/stevemao/conventional-changelog-angular/blob/master/convention.md) for your commit messages.
+
+Once you are ready to commit the changes, please use the below commands
+
+1. `git add <files to be comitted>`
+2. `$ npm run commit`
+
+... and follow the instruction of the interactive prompt.
+
+### Opt into run tests while committing
+
+`npm run commit` will not execute any `tests`, prior `commit`ing, however you can **opt into it**.
+
+In order to execute `tests` automatically before `commit`, create a file `.opt-in` in the root of the project with `pre-commit` as the content.
+
+Excute the following command in the root of the project to create the above stated file.
+
+`$ echo pre-commit > .opt-in`
