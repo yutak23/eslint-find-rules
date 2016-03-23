@@ -39,6 +39,7 @@
     "ghooks": "1.0.3",
     "npm-run-all": "1.5.3",
     "nyc": "6.1.1",
+    "opt-cli": "^1.1.1",
     "proxyquire": "1.7.4",
     "semantic-release": "4.3.5",
     "validate-commit-msg": "2.4.0"
@@ -61,8 +62,10 @@
     ]
   },
   "config": {
-    "commig-msg": "validate-commit-msg",
-    "pre-commit": "npm run validate",
+    "ghooks": {
+      "commit-msg": "validate-commit-msg",
+      "pre-commit": "opt --in pre-commit --exec \"npm run validate\""
+    },
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
