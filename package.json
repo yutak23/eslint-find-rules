@@ -61,10 +61,12 @@
     ]
   },
   "config": {
-    "commig-msg": "validate-commit-msg",
-    "pre-commit": "npm run validate",
+    "ghooks": {
+      "commit-msg": "validate-commit-msg",
+      "pre-commit": "npm run validate"
+    },
     "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
+      "path": "node_modules/cz-conventional-changelog"
     }
   },
   "repository": {
