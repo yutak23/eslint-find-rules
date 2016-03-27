@@ -1,6 +1,0 @@
-{
-  "extends": "./base-config.yml",
-  "rules": {
-    "comma-dangle": [2, "never"]
-  }
-}

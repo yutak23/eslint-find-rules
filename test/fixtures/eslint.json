@@ -1,0 +1,6 @@
+{
+  "extends": "./eslint.yml",
+  "plugins": [
+    "react"
+  ]
+}

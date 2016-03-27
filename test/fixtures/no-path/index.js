@@ -1,5 +1,5 @@
 module.exports = {
   rules: {
-    'no-alert': [2],
-  },
+    'foo-rule': [2]
+  }
 }
