@@ -28,13 +28,11 @@ function _getConfig(configFile) {
   return cliEngine.getConfigForFile()
 }
 
-function _getCurrentRules() {
-  var config = this.getConfig()
+function _getCurrentRules(config) {
   return Object.keys(config.rules)
 }
 
-function _getPluginRules() {
-  var config = this.getConfig()
+function _getPluginRules(config) {
   var pluginRules = []
   var plugins = config.plugins
   if (plugins) {
@@ -51,8 +49,7 @@ function _getPluginRules() {
   return pluginRules
 }
 
-function _getAllRules() {
-  var pluginRules = this.getPluginRules()
+function _getAllAvailableRules(pluginRules) {
   var allRules = fs
     .readdirSync('./node_modules/eslint/lib/rules')
     .map(function removeJsFromFilename(filename) {
@@ -67,30 +64,35 @@ function _getAllRules() {
 function RuleFinder(specifiedFile) {
   var configFile = _getConfigFile(specifiedFile)
   var config = _getConfig(configFile)
-  var currentRules, pluginRules, allRules
+  var currentRules = _getCurrentRules(config)
+  var pluginRules = _getPluginRules(config)
+  var allRules = _getAllAvailableRules(pluginRules)
 
-  this.getConfig = function getConfig() {
-    return config
-  }
-
-  currentRules = _getCurrentRules.call(this)
+  // easily list all the current rules
+  // instead of traversing through the extended files
+  // or refering documentation
   this.getCurrentRules = function getCurrentRules() {
     return currentRules
   }
 
-  pluginRules = _getPluginRules.call(this)
+  // easily list all the plugin rules
+  // instead of traversing through the extended files
+  // or refering documentation
   this.getPluginRules = function getPluginRules() {
     return pluginRules
   }
 
-  allRules = _getAllRules.call(this)
-  this.getAllRules = function getAllRules() {
+  // easily list all the current rules
+  // instead of traversing through eslint and pluging packages
+  // or refering documentation
+  this.getAllAvailableRules = function getAllAvailableRules() {
     return allRules
   }
+
 }
 
 RuleFinder.prototype.getNewRules = function getNewRules() {
-  return difference(this.getAllRules(), this.getCurrentRules())
+  return difference(this.getAllAvailableRules(), this.getCurrentRules())
 }
 
 module.exports = RuleFinder
