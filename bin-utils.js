@@ -2,12 +2,6 @@ var path = require('path')
 var isAbsolute = require('path-is-absolute')
 var eslint = require('eslint')
 
-function resolvePackagesMain(cwd, packageFile) {
-  var packageFilePath = path.join(cwd, packageFile)
-  var packageJson = require(packageFilePath)
-  return packageJson.main
-}
-
 function getConfigFile(specifiedFile) {
   //var specifiedFile = process.argv[2]
   if (specifiedFile) {
@@ -19,7 +13,7 @@ function getConfigFile(specifiedFile) {
     }
   } else {
     // this is not being called with an arg. Use the package.json `main`
-    return resolvePackagesMain(process.cwd(), 'package.json')
+    return require(path.join(process.cwd(), 'package.json')).main
   }
 }
 
@@ -32,12 +26,6 @@ function getConfig(specifiedFile) {
     configFile: configFile, // eslint-disable-line object-shorthand
   })
   return cliEngine.getConfigForFile()
-}
-
-function mapPluginRuleNames(plugin) {
-  return function mapPluginNames(rule) {
-    return plugin + '/' + rule
-  }
 }
 
 function getCurrentRules(conf) {
@@ -54,7 +42,11 @@ function getPluginRules(conf) {
       var thisPluginsRules = thisPluginsConfig.rules
       /* istanbul ignore next */
       if (typeof thisPluginsRules === 'object') {
-        rules = rules.concat(Object.keys(thisPluginsRules).map(mapPluginRuleNames(plugin)))
+        rules = rules.concat(
+          Object.keys(thisPluginsRules).map(function mapPluginNames(rule) {
+            return plugin + '/' + rule
+          })
+        )
       }
     })
   }
