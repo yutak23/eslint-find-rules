@@ -17,7 +17,7 @@ const RuleFinder = proxyquire('../rule-finder', {
     },
     '@noCallThru': true,
     '@global': true,
-  }
+  },
 })
 
 const noSpecifiedFile = path.resolve(process.cwd(), './fixtures/no-path')
@@ -28,18 +28,18 @@ test.afterEach(() => {
   process.cwd = processCwd
 })
 
-test(`no specifiedFile is passed to the constructor`, (t) => {
+test('no specifiedFile is passed to the constructor', (t) => {
   process.cwd = () => noSpecifiedFile
-  let ruleFinder = new RuleFinder();
+  const ruleFinder = new RuleFinder()
   t.same(ruleFinder.getNewRules(), ['bar-rule', 'baz-rule'])
 })
 
-test(`specifiedFile (relative path) is passed to the constructor`, (t) => {
-  let ruleFinder = new RuleFinder(specifiedFileRelative);
-  t.same(ruleFinder.getNewRules(), [ 'baz-rule', 'react/foo-rule', 'react/bar-rule', 'react/baz-rule' ])
+test('specifiedFile (relative path) is passed to the constructor', (t) => {
+  const ruleFinder = new RuleFinder(specifiedFileRelative)
+  t.same(ruleFinder.getNewRules(), ['baz-rule', 'react/foo-rule', 'react/bar-rule', 'react/baz-rule'])
 })
 
-test(`specifiedFile (absolut path) is passed to the constructor`, (t) => {
-  let ruleFinder = new RuleFinder(specifiedFileAbsolute);
-  t.same(ruleFinder.getNewRules(), [ 'baz-rule', 'react/foo-rule', 'react/bar-rule', 'react/baz-rule' ])
+test('specifiedFile (absolut path) is passed to the constructor', (t) => {
+  const ruleFinder = new RuleFinder(specifiedFileAbsolute)
+  t.same(ruleFinder.getNewRules(), ['baz-rule', 'react/foo-rule', 'react/bar-rule', 'react/baz-rule'])
 })
