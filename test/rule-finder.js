@@ -5,7 +5,7 @@ import proxyquire from 'proxyquire'
 
 const processCwd = process.cwd
 
-const RuleFinder = proxyquire('../rule-finder', {
+const RuleFinder = proxyquire('../src/rule-finder', {
   fs: {
     readdirSync: () => ['foo-rule.js', 'bar-rule.js', 'baz-rule.js'],
   },
