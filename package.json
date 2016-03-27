@@ -1,7 +1,7 @@
 {
   "name": "eslint-find-new-rules",
   "version": "0.0.0-semantically-released",
-  "description": "Use this to save yourself some time when working on a webpack configuration.",
+  "description": "Find built-in ESLint rules you don't have in your custom config.",
   "main": "index.js",
   "scripts": {
     "cover": "nyc --reporter=lcov --reporter=text ava",
