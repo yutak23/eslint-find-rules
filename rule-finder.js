@@ -64,34 +64,32 @@ function _getAllRules() {
   return allRules
 }
 
-var RuleFinder = function(specifiedFile) {
+function RuleFinder(specifiedFile) {
   var configFile = _getConfigFile(specifiedFile)
   var config = _getConfig(configFile)
-  var currentRules
-  var pluginRules
-  var allRules
+  var currentRules, pluginRules, allRules
 
-  this.getConfig = function() {
+  this.getConfig = function getConfig() {
     return config
   }
 
   currentRules = _getCurrentRules.call(this)
-  this.getCurrentRules = function() {
+  this.getCurrentRules = function getCurrentRules() {
     return currentRules
   }
 
   pluginRules = _getPluginRules.call(this)
-  this.getPluginRules = function() {
+  this.getPluginRules = function getPluginRules() {
     return pluginRules
   }
 
   allRules = _getAllRules.call(this)
-  this.getAllRules = function() {
+  this.getAllRules = function getAllRules() {
     return allRules
   }
 }
 
-RuleFinder.prototype.getNewRules = function() {
+RuleFinder.prototype.getNewRules = function getNewRules() {
   return difference(this.getAllRules(), this.getCurrentRules())
 }
 

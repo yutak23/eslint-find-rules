@@ -6,7 +6,7 @@
 // preset. It helps with upgrading the preset when new ESLint gets released.
 var RuleFinder = require('./rule-finder')
 var specifiedFile = process.argv[2]
-var ruleFinder = new RuleFinder(specifiedFile);
+var ruleFinder = new RuleFinder(specifiedFile)
 
 var newRules = ruleFinder.getNewRules()
 
