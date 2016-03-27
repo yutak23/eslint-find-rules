@@ -68,23 +68,17 @@ function RuleFinder(specifiedFile) {
   var pluginRules = _getPluginRules(config)
   var allRules = _getAllAvailableRules(pluginRules)
 
-  // easily list all the current rules
-  // instead of traversing through the extended files
-  // or refering documentation
+  // get all the current rules instead of referring the extended files or documentation
   this.getCurrentRules = function getCurrentRules() {
     return currentRules
   }
 
-  // easily list all the plugin rules
-  // instead of traversing through the extended files
-  // or refering documentation
+  // get all the plugin rules instead of referring the extended files or documentation
   this.getPluginRules = function getPluginRules() {
     return pluginRules
   }
 
-  // easily list all the current rules
-  // instead of traversing through eslint and pluging packages
-  // or refering documentation
+  // get all the availale rules instead of referring eslint and pluging packages or documentation
   this.getAllAvailableRules = function getAllAvailableRules() {
     return allRules
   }
