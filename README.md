@@ -27,7 +27,7 @@ The intended usage is as an npm script:
 {
   ...
   "scripts": {
-    "find-new-rules": "eslint-find-new-rules eslint-config-yourConfigName"
+    "find-new-rules": "eslint-find-new-rules path/to/eslint-config"
   }
   ...
 }
@@ -63,6 +63,27 @@ It will also default to the `main` in your `package.json`, so you can omit the a
 
 ```
 eslint-find-new-rules
+```
+
+### As a `require`d module
+
+```
+var getRuleFinder = require('./eslint-find-new-rules')
+var ruleFinder = getRuleFinder('path/to/eslint-config')
+
+// default to the `main` in your `package.json`
+// var ruleFinder = getRuleFinder()
+
+// get all the current, plugin, available and unused rules
+// without referring the extended files or documentation
+
+ruleFinder.getCurrentRules()
+
+ruleFinder.getPluginRules()
+
+ruleFinder.getAllAvailableRules()
+
+ruleFinder.getUnusedRules()
 ```
 
 ## Contributors
