@@ -8,7 +8,7 @@ var getRuleFinder = require('./rule-finder')
 var specifiedFile = process.argv[2]
 var ruleFinder = getRuleFinder(specifiedFile)
 
-var newRules = ruleFinder.getNewRules()
+var newRules = ruleFinder.getUnusedRules()
 
 if (newRules.length) {
   console.log('New rules to add to the config: ' + newRules.join(', ') + '.') // eslint-disable-line no-console

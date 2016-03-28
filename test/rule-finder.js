@@ -31,7 +31,7 @@ test.afterEach(() => {
 test('no specifiedFile is passed to the constructor', (t) => {
   process.cwd = () => noSpecifiedFile
   const ruleFinder = getRuleFinder()
-  t.same(ruleFinder.getNewRules(), ['bar-rule', 'baz-rule'])
+  t.same(ruleFinder.getUnusedRules(), ['bar-rule', 'baz-rule'])
 })
 
 test('no specifiedFile - curent rules', (t) => {
@@ -54,7 +54,7 @@ test('no specifiedFile - all available rules', (t) => {
 
 test('specifiedFile (relative path) is passed to the constructor', (t) => {
   const ruleFinder = getRuleFinder(specifiedFileRelative)
-  t.same(ruleFinder.getNewRules(), ['baz-rule', 'react/foo-rule', 'react/bar-rule', 'react/baz-rule'])
+  t.same(ruleFinder.getUnusedRules(), ['baz-rule', 'react/foo-rule', 'react/bar-rule', 'react/baz-rule'])
 })
 
 test('specifiedFile (relative path) - curent rules', (t) => {
@@ -77,7 +77,7 @@ test('specifiedFile (relative path) - all available rules', (t) => {
 
 test('specifiedFile (absolut path) is passed to the constructor', (t) => {
   const ruleFinder = getRuleFinder(specifiedFileAbsolute)
-  t.same(ruleFinder.getNewRules(), ['baz-rule', 'react/foo-rule', 'react/bar-rule', 'react/baz-rule'])
+  t.same(ruleFinder.getUnusedRules(), ['baz-rule', 'react/foo-rule', 'react/bar-rule', 'react/baz-rule'])
 })
 
 test('specifiedFile (absolut path) - curent rules', (t) => {

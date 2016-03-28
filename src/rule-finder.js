@@ -67,7 +67,7 @@ function RuleFinder(specifiedFile) {
   var currentRules = _getCurrentRules(config)
   var pluginRules = _getPluginRules(config)
   var allRules = _getAllAvailableRules(pluginRules)
-  var newRules = difference(allRules, currentRules)
+  var unusedRules = difference(allRules, currentRules)
 
   // get all the current rules instead of referring the extended files or documentation
   this.getCurrentRules = function getCurrentRules() {
@@ -84,8 +84,8 @@ function RuleFinder(specifiedFile) {
     return allRules
   }
 
-  this.getNewRules = function getNewRules() {
-    return newRules
+  this.getUnusedRules = function getUnusedRules() {
+    return unusedRules
   }
 
 }
