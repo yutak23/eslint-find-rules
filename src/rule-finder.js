@@ -90,4 +90,6 @@ function RuleFinder(specifiedFile) {
 
 }
 
-module.exports = RuleFinder
+module.exports = function getRuleFinder(specifiedFile) {
+  return new RuleFinder(specifiedFile)
+}
