@@ -2,7 +2,7 @@
   "name": "eslint-find-new-rules",
   "version": "0.0.0-semantically-released",
   "description": "Find built-in ESLint rules you don't have in your custom config.",
-  "main": "index.js",
+  "main": "src/rule-finder.js",
   "scripts": {
     "cover": "nyc --reporter=lcov --reporter=text ava",
     "test": "ava",
@@ -16,7 +16,7 @@
     "report-coverage": "cat ./coverage/lcov.info | node_modules/.bin/codecov"
   },
   "bin": {
-    "eslint-find-new-rules": "bin.js"
+    "eslint-find-new-rules": "src/bin.js"
   },
   "keywords": [],
   "author": "Michał Gołębiowski <m.goleb@gmail.com>",
