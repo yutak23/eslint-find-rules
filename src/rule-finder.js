@@ -79,7 +79,7 @@ function RuleFinder(specifiedFile) {
     return pluginRules
   }
 
-  // get all the availale rules instead of referring eslint and pluging packages or documentation
+  // get all the available rules instead of referring eslint and plugin packages or documentation
   this.getAllAvailableRules = function getAllAvailableRules() {
     return allRules
   }
