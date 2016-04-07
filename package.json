@@ -1,5 +1,5 @@
 {
-  "name": "eslint-find-new-rules",
+  "name": "eslint-rule-finder",
   "version": "0.0.0-semantically-released",
   "description": "Find built-in ESLint rules you don't have in your custom config.",
   "main": "src/rule-finder.js",
@@ -16,7 +16,7 @@
     "report-coverage": "cat ./coverage/lcov.info | node_modules/.bin/codecov"
   },
   "bin": {
-    "eslint-find-new-rules": "src/bin.js"
+    "eslint-rule-finder": "src/bin.js"
   },
   "keywords": [],
   "author": "Michał Gołębiowski <m.goleb@gmail.com>",
@@ -42,7 +42,8 @@
     "opt-cli": "^1.1.1",
     "proxyquire": "1.7.4",
     "semantic-release": "4.3.5",
-    "validate-commit-msg": "2.4.0"
+    "validate-commit-msg": "2.4.0",
+    "yargs": "^4.4.0"
   },
   "peerDependencies": {
     "eslint": "^2.0.0"
@@ -72,10 +73,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/kentcdodds/eslint-find-new-rules.git"
+    "url": "https://github.com/sarbbottam/eslint-rule-finder.git"
   },
   "bugs": {
-    "url": "https://github.com/kentcdodds/eslint-find-new-rules/issues"
+    "url": "https://github.com/sarbbottam/eslint-rule-finder/issues"
   },
-  "homepage": "https://github.com/kentcdodds/eslint-find-new-rules#readme"
+  "homepage": "https://github.com/sarbbottam/eslint-rule-finder#readme"
 }
