@@ -34,7 +34,7 @@
     "yargs": "^4.4.0"
   },
   "devDependencies": {
-    "all-contributors-cli": "2.0.0-beta6",
+    "all-contributors-cli": "3.0.1",
     "codecov": "1.0.1",
     "commitizen": "2.8.1",
     "cz-conventional-changelog": "1.1.6",
@@ -45,7 +45,7 @@
     "npm-run-all": "1.8.0",
     "nyc": "6.4.0",
     "opt-cli": "^1.1.1",
-    "proxyquire": "1.7.4",
+    "proxyquire": "1.7.7",
     "semantic-release": "4.3.5",
     "sinon": "^1.17.3",
     "travis-after-all": "^1.4.4",
