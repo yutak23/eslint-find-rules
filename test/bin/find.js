@@ -71,6 +71,9 @@ describe('bin', function() {
     process.argv[2] = '-a'
     proxyquire('../../src/bin/find', stub)
     assert.ok(getAllAvailableRules.called)
+    process.argv[2] = '--all-available'
+    proxyquire('../../src/bin/find', stub)
+    assert.ok(getAllAvailableRules.called)
   })
 
   it('option -u|--unused', function() {
@@ -92,12 +95,16 @@ describe('bin', function() {
     assert.ok(getUnusedRules.called)
   })
 
-  it('option -u|--unused along with -n|no-error', function() {
+  it('option -u|--unused along with -n|--no-error', function() {
     process.exit = function(status) {
       assert.equal(status, 0)
     }
     process.argv[2] = '-u'
     process.argv[3] = '-n'
+    proxyquire('../../src/bin/find', stub)
+    assert.ok(getUnusedRules.called)
+    process.argv[2] = '-u'
+    process.argv[3] = '--no-error'
     proxyquire('../../src/bin/find', stub)
     assert.ok(getUnusedRules.called)
   })

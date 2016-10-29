@@ -7,21 +7,25 @@ var options = {
   getPluginRules: ['plugin', 'p'],
   getAllAvailableRules: ['all-available', 'a'],
   getUnusedRules: ['unused', 'u'],
-  n: ['no-error'],
-  nc: ['no-core'],
+  n: [],
+  error: ['error'],
+  nc: [],
+  core: ['core'],
   verbose: ['verbose', 'v'],
 }
 
 var argv = require('yargs')
   .boolean(Object.keys(options))
   .alias(options)
+  .default('error', true)
+  .default('core', true)
   .argv
 
 var getRuleURI = require('eslint-rule-documentation')
 
 var cli = require('../lib/cli-util')
 
-var processExitCode = argv.u && !argv.n ? 1 : 0
+var processExitCode = argv.u && (!argv.n || argv.error) ? 1 : 0
 var getRuleFinder = require('../lib/rule-finder')
 var specifiedFile = argv._[0]
 
