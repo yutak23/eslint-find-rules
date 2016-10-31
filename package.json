@@ -11,12 +11,12 @@
     "commit": "git-cz",
     "validate": "npm-run-all --parallel lint cover --sequential check-coverage",
     "check-coverage": "nyc check-coverage --statements 100 --branches 100 --functions 100 --lines 100",
+    "prebuild": "rimraf dist",
     "build": "babel src -d dist --presets es2015",
     "report-coverage": "cat ./coverage/lcov.info | node_modules/.bin/codecov",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "travis-after-all": "travis-after-all && npm run report-coverage && npm run semantic-release"
   },
-  "files": ["dist"],
   "bin": {
     "eslint-find-rules": "dist/bin/find.js",
     "eslint-diff-rules": "dist/bin/diff.js"
@@ -52,6 +52,7 @@
     "nyc": "6.6.1",
     "opt-cli": "^1.1.1",
     "proxyquire": "1.7.10",
+    "rimraf": "^2.6.0",
     "semantic-release": "4.3.5",
     "sinon": "^1.17.3",
     "travis-after-all": "^1.4.4",
