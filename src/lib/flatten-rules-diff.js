@@ -1,38 +1,36 @@
 function flattenRulesDiff(diff) {
   if (Array.isArray(diff)) {
-    return flattenRulesDiffArray(diff)
+    return flattenRulesDiffArray(diff);
   } else if (typeof diff === 'object') {
-    return flattenRulesDiffObject(diff)
+    return flattenRulesDiffObject(diff);
   }
 
-  return []
+  return [];
 }
 
 function flattenRulesDiffObject(diffObject) {
-  var flattened = []
+  const flattened = [];
 
-  Object.keys(diffObject).forEach(function flattenEachRuleDiff(ruleName) {
-    var ruleRow = [ruleName]
-    var diff = diffObject[ruleName]
+  Object.keys(diffObject).forEach(ruleName => {
+    const diff = diffObject[ruleName];
+    const ruleRow = [ruleName].concat(
+      Object.keys(diff).map(configName => diff[configName])
+    );
 
-    Object.keys(diff).forEach(function flattenEachChildProp(configName) {
-      ruleRow.push(diff[configName])
-    })
+    flattened.push(...ruleRow);
+  });
 
-    flattened.push.apply(flattened, ruleRow)
-  })
-
-  return flattened
+  return flattened;
 }
 
 function flattenRulesDiffArray(diffArray) {
-  var flattened = []
+  const flattened = [];
 
-  diffArray.forEach(function flattenEachDiff(diff) {
-    flattened.push.apply(flattened, flattenRulesDiff(diff))
-  })
+  diffArray.forEach(diff => {
+    flattened.push(...flattenRulesDiff(diff));
+  });
 
-  return flattened
+  return flattened;
 }
 
-module.exports = flattenRulesDiff
+module.exports = flattenRulesDiff;

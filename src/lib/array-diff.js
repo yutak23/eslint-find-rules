@@ -1,19 +1,5 @@
 function difference(a, b) {
-  var hash = {}
-  var diff = {}
-
-  b.forEach(function createHash(item) {
-    hash[item] = true
-  })
-
-  a.forEach(function findDiff(item) {
-    if (!hash[item] && !diff[item]) {
-      diff[item] = true
-    }
-  })
-
-  return Object.keys(diff)
-
+  return a.filter(item => !b.includes(item)).sort((a, b) => a > b);
 }
 
-module.exports = difference
+module.exports = difference;
