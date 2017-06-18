@@ -42,10 +42,33 @@ const getRuleFinder = proxyquire('../../src/lib/rule-finder', {
   }
 });
 
+const getRuleFinderForDedupeTests = proxyquire('../../src/lib/rule-finder', {
+  eslint: {
+    linter: {
+      getRules() {
+        return new Map()
+          .set('foo-rule', {})
+          .set('bar-rule', {})
+          .set('plugin/duplicate-foo-rule', {})
+          .set('plugin/duplicate-bar-rule', {});
+      }
+    }
+  },
+  'eslint-plugin-plugin': {
+    rules: {
+      'duplicate-foo-rule': {},
+      'duplicate-bar-rule': {}
+    },
+    '@noCallThru': true,
+    '@global': true
+  }
+});
+
 const noSpecifiedFile = path.resolve(process.cwd(), './test/fixtures/no-path');
 const specifiedFileRelative = './test/fixtures/eslint.json';
 const specifiedFileAbsolute = path.join(process.cwd(), specifiedFileRelative);
 const noRulesFile = path.join(process.cwd(), './test/fixtures/eslint-with-plugin-with-no-rules.json');
+const noDuplicateRulesFiles = './test/fixtures/eslint-dedupe-plugin-rules.json';
 
 describe('rule-finder', () => {
   afterEach(() => {
@@ -336,6 +359,24 @@ describe('rule-finder', () => {
       'plugin/bar-rule',
       'plugin/baz-rule',
       'plugin/foo-rule'
+    ]);
+  });
+
+  it('dedupes plugin rules - all available rules', () => {
+    const ruleFinder = getRuleFinderForDedupeTests(noDuplicateRulesFiles);
+    assert.deepEqual(ruleFinder.getAllAvailableRules(), [
+      'bar-rule',
+      'foo-rule',
+      'plugin/duplicate-bar-rule',
+      'plugin/duplicate-foo-rule'
+    ]);
+  });
+
+  it('dedupes plugin rules - unused rules', () => {
+    const ruleFinder = getRuleFinderForDedupeTests(noDuplicateRulesFiles);
+    assert.deepEqual(ruleFinder.getUnusedRules(), [
+      'bar-rule',
+      'plugin/duplicate-foo-rule'
     ]);
   });
 });

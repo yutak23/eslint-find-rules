@@ -88,10 +88,11 @@ function RuleFinder(specifiedFile, options) {
   const pluginRules = _getPluginRules(config, {includeDeprecated});
   const coreRules = _getCoreRules({includeDeprecated});
   const allRules = omitCore ? pluginRules : [...coreRules, ...pluginRules];
+  const dedupedRules = [...new Set(allRules)];
   if (omitCore) {
     currentRules = currentRules.filter(_isNotCore);
   }
-  const unusedRules = difference(allRules, currentRules); // eslint-disable-line vars-on-top
+  const unusedRules = difference(dedupedRules, currentRules); // eslint-disable-line vars-on-top
 
   // Get all the current rules instead of referring the extended files or documentation
   this.getCurrentRules = () => getSortedRules(currentRules);
@@ -103,7 +104,7 @@ function RuleFinder(specifiedFile, options) {
   this.getPluginRules = () => getSortedRules(pluginRules);
 
   // Get all the available rules instead of referring eslint and plugin packages or documentation
-  this.getAllAvailableRules = () => getSortedRules(allRules);
+  this.getAllAvailableRules = () => getSortedRules(dedupedRules);
 
   this.getUnusedRules = () => getSortedRules(unusedRules);
 }
