@@ -69,6 +69,7 @@ const specifiedFileRelative = './test/fixtures/eslint.json';
 const specifiedFileAbsolute = path.join(process.cwd(), specifiedFileRelative);
 const noRulesFile = path.join(process.cwd(), './test/fixtures/eslint-with-plugin-with-no-rules.json');
 const noDuplicateRulesFiles = './test/fixtures/eslint-dedupe-plugin-rules.json';
+const usingDeprecatedRulesFile = path.join(process.cwd(), './test/fixtures/eslint-with-deprecated-rules.json');
 
 describe('rule-finder', () => {
   afterEach(() => {
@@ -377,6 +378,20 @@ describe('rule-finder', () => {
     assert.deepEqual(ruleFinder.getUnusedRules(), [
       'bar-rule',
       'plugin/duplicate-foo-rule'
+    ]);
+  });
+
+  it('specifiedFile (absolute path) without deprecated rules - deprecated rules', () => {
+    const ruleFinder = getRuleFinder(specifiedFileAbsolute);
+    assert.deepEqual(ruleFinder.getDeprecatedRules(), []);
+  });
+
+  it('specifiedFile (absolute path) with deprecated rules - deprecated rules', () => {
+    const ruleFinder = getRuleFinder(usingDeprecatedRulesFile);
+    assert.deepEqual(ruleFinder.getDeprecatedRules(), [
+      'old-rule',
+      'plugin/old-plugin-rule',
+      'scoped-plugin/old-plugin-rule'
     ]);
   });
 });

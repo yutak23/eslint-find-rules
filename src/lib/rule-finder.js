@@ -26,7 +26,7 @@ function _getConfig(configFile) {
   return cliEngine.getConfigForFile();
 }
 
-function _getCurrentRules(config) {
+function _getCurrentNamesRules(config) {
   return Object.keys(config.rules);
 }
 
@@ -48,32 +48,36 @@ function _normalizePluginName(name) {
 }
 
 function _isDeprecated(rule) {
-  return rule.meta && rule.meta.deprecated;
+  return rule && rule.meta && rule.meta.deprecated;
 }
 
-function _getPluginRules(config, {includeDeprecated}) {
-  let pluginRules = [];
+function _notDeprecated(rule) {
+  return !_isDeprecated(rule);
+}
+
+function _getPluginRules(config) {
+  const pluginRules = new Map();
   const plugins = config.plugins;
   if (plugins) {
     plugins.forEach(plugin => {
       const normalized = _normalizePluginName(plugin);
       const pluginConfig = require(normalized.module);  // eslint-disable-line import/no-dynamic-require
-
       const rules = pluginConfig.rules === undefined ? {} : pluginConfig.rules;
-      pluginRules = pluginRules.concat(
-        Object.keys(rules)
-          .filter(rule => includeDeprecated || !_isDeprecated(rules[rule]))
-          .map(rule => `${normalized.prefix}/${rule}`)
+
+      Object.keys(rules).forEach(ruleName =>
+        pluginRules.set(`${normalized.prefix}/${ruleName}`, rules[ruleName])
       );
     });
   }
   return pluginRules;
 }
 
-function _getCoreRules({includeDeprecated}) {
-  const rules = eslint.linter.getRules();
-  return Array.from(rules.keys())
-    .filter(rule => includeDeprecated || !_isDeprecated(rules.get(rule)));
+function _getCoreRules() {
+  return eslint.linter.getRules();
+}
+
+function _filterRuleNames(ruleNames, rules, predicate) {
+  return ruleNames.filter(ruleName => predicate(rules.get(ruleName)));
 }
 
 function _isNotCore(rule) {
@@ -84,29 +88,41 @@ function RuleFinder(specifiedFile, options) {
   const {omitCore, includeDeprecated} = options;
   const configFile = _getConfigFile(specifiedFile);
   const config = _getConfig(configFile);
-  let currentRules = _getCurrentRules(config);
-  const pluginRules = _getPluginRules(config, {includeDeprecated});
-  const coreRules = _getCoreRules({includeDeprecated});
-  const allRules = omitCore ? pluginRules : [...coreRules, ...pluginRules];
-  const dedupedRules = [...new Set(allRules)];
+  let currentRuleNames = _getCurrentNamesRules(config);
   if (omitCore) {
-    currentRules = currentRules.filter(_isNotCore);
+    currentRuleNames = currentRuleNames.filter(_isNotCore);
   }
-  const unusedRules = difference(dedupedRules, currentRules); // eslint-disable-line vars-on-top
+
+  const pluginRules = _getPluginRules(config); // eslint-disable-line vars-on-top
+  const coreRules = _getCoreRules();
+  const allRules = omitCore ? pluginRules : new Map([...coreRules, ...pluginRules]);
+
+  let allRuleNames = [...allRules.keys()];
+  let pluginRuleNames = [...pluginRules.keys()];
+  if (!includeDeprecated) {
+    allRuleNames = _filterRuleNames(allRuleNames, allRules, _notDeprecated);
+    pluginRuleNames = _filterRuleNames(pluginRuleNames, pluginRules, _notDeprecated);
+  }
+  const deprecatedRuleNames = _filterRuleNames(currentRuleNames, allRules, _isDeprecated);
+  const dedupedRuleNames = [...new Set(allRuleNames)];
+  const unusedRuleNames = difference(dedupedRuleNames, currentRuleNames);
 
   // Get all the current rules instead of referring the extended files or documentation
-  this.getCurrentRules = () => getSortedRules(currentRules);
+  this.getCurrentRules = () => getSortedRules(currentRuleNames);
 
   // Get all the current rules' particular configuration
   this.getCurrentRulesDetailed = () => config.rules;
 
   // Get all the plugin rules instead of referring the extended files or documentation
-  this.getPluginRules = () => getSortedRules(pluginRules);
+  this.getPluginRules = () => getSortedRules(pluginRuleNames);
 
   // Get all the available rules instead of referring eslint and plugin packages or documentation
-  this.getAllAvailableRules = () => getSortedRules(dedupedRules);
+  this.getAllAvailableRules = () => getSortedRules(dedupedRuleNames);
 
-  this.getUnusedRules = () => getSortedRules(unusedRules);
+  this.getUnusedRules = () => getSortedRules(unusedRuleNames);
+
+  // Get all the current rules that are deprecated
+  this.getDeprecatedRules = () => getSortedRules(deprecatedRuleNames);
 }
 
 module.exports = function (specifiedFile, options = {}) {

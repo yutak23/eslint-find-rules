@@ -45,14 +45,14 @@ The intended usage is as an npm script:
 Then run it with: `$ npm run --silent eslint-find-option-rules` (the `--silent` is to silence npm output).
 
 ```
-available options are -c|--current, -a|--all-available, -p|--plugin, -u|--unused
+available options are -a|--all-available, -c|--current, -d|--deprecated, -p|--plugin, -u|--unused
 available flags are -n|--no-error, --no-core, and -i/--include deprecated
 ```
 
-By default it will error out only for `-u|--unused`,
-however if you do not want the `process` to `exit` with a `non-zero` exit code, use the `-n|--no-error` flag along with `-u|--unused`.
+By default it will error out only for `-d|--deprecated` and `-u|--unused`,
+however if you do not want the `process` to `exit` with a `non-zero` exit code, use the `-n|--no-error` flag along with `-d|--deprecated` or `-u|--unused`.
 
-By default, core rules will be included in the output of `-c|--current`, `-a|--all-available`, and `-u|--unused`.  If you want to report on plugin rules only, use the `--no-core` flag.
+By default, core rules will be included in the output of `-a|--all-available`, `-c|--current`, `-d|--deprecated`, and `-u|--unused`.  If you want to report on plugin rules only, use the `--no-core` flag.
 
 By default, deprecated rules will be omitted from the output of `-a|--all-available`, `-p|--plugin` and `-u|--unused`.  If you want to report on deprecated rules as well, use the `--include=deprecated` or `-i deprecated` flag.
 
@@ -63,7 +63,7 @@ By default, deprecated rules will be omitted from the output of `-a|--all-availa
 This is really handy in an actual config module (like [eslint-config-kentcdodds](https://github.com/kentcdodds/eslint-config-kentcdodds)) where you could also do:
 
 ```
-// available options are -c|--current, -a|--all-available, -p|--plugin, -u|--unused
+// available options are -a|--all-available, -c|--current, -d|--deprecated, -p|--plugin, -u|--unused
 eslint-find-rules --option ./index.js
 ```
 
@@ -110,6 +110,8 @@ ruleFinder.getPluginRules()
 ruleFinder.getAllAvailableRules()
 
 ruleFinder.getUnusedRules()
+
+ruleFinder.getDeprecatedRules()
 ```
 
 ### Log the difference between two config files

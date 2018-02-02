@@ -6,6 +6,7 @@ const options = {
   getPluginRules: ['plugin', 'p'],
   getAllAvailableRules: ['all-available', 'a'],
   getUnusedRules: ['unused', 'u'],
+  getDeprecatedRules: ['deprecated', 'd'],
   n: [],
   error: ['error'],
   core: ['core'],
@@ -36,7 +37,7 @@ const ruleFinder = getRuleFinder(specifiedFile, finderOptions);
 const errorOut = argv.error && !argv.n;
 let processExitCode = argv.u && errorOut ? 1 : 0;
 
-if (!argv.c && !argv.p && !argv.a && !argv.u) {
+if (!argv.c && !argv.p && !argv.a && !argv.u && !argv.d) {
   console.log('no option provided, please provide a valid option'); // eslint-disable-line no-console
   console.log('usage:'); // eslint-disable-line no-console
   console.log('eslint-find-rules [option] <file> [flag]'); // eslint-disable-line no-console

@@ -9,6 +9,7 @@ const getCurrentRules = sinon.stub().returns(['current', 'rules']);
 const getPluginRules = sinon.stub().returns(['plugin', 'rules']);
 const getAllAvailableRules = sinon.stub().returns(['all', 'available']);
 const getUnusedRules = sinon.stub().returns(['unused', 'rules']);
+const getDeprecatedRules = sinon.stub().returns(['deprecated', 'rules']);
 
 let stub;
 
@@ -20,13 +21,14 @@ describe('bin', () => {
           getCurrentRules,
           getPluginRules,
           getAllAvailableRules,
-          getUnusedRules
+          getUnusedRules,
+          getDeprecatedRules
         };
       }
     };
 
     console.log = (...args) => { // eslint-disable-line no-console
-      if (args[0].match(/(current|plugin|all-available|unused|rules found)/)) {
+      if (args[0].match(/(current|plugin|all-available|unused|deprecated|rules found)/)) {
         return;
       }
       consoleLog(...args);
@@ -115,6 +117,45 @@ describe('bin', () => {
     process.argv[3] = '--no-error';
     proxyquire('../../src/bin/find', stub);
     assert.ok(getUnusedRules.called);
+  });
+
+  it('option -d|--deprecated', () => {
+    process.exit = status => {
+      assert.equal(status, 1);
+    };
+    process.argv[2] = '-d';
+    proxyquire('../../src/bin/find', stub);
+    assert.ok(getDeprecatedRules.called);
+  });
+
+  it('options -d|--deprecated and no deprecated rules found', () => {
+    getDeprecatedRules.returns([]);
+    process.exit = status => {
+      assert.equal(status, 0);
+    };
+    process.argv[2] = '-d';
+    proxyquire('../../src/bin/find', stub);
+    assert.ok(getDeprecatedRules.called);
+  });
+
+  it('option -d|--deprecated along with -n', () => {
+    process.exit = status => {
+      assert.equal(status, 0);
+    };
+    process.argv[2] = '-d';
+    process.argv[3] = '-n';
+    proxyquire('../../src/bin/find', stub);
+    assert.ok(getDeprecatedRules.called);
+  });
+
+  it('option -d|--deprecated along with --no-error', () => {
+    process.exit = status => {
+      assert.equal(status, 0);
+    };
+    process.argv[2] = '-d';
+    process.argv[3] = '--no-error';
+    proxyquire('../../src/bin/find', stub);
+    assert.ok(getDeprecatedRules.called);
   });
 
   it('logs verbosely', () => {
