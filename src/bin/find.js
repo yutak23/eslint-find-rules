@@ -12,6 +12,7 @@ const options = {
   core: ['core'],
   verbose: ['verbose', 'v']
 };
+const optionsThatError = ['getUnusedRules', 'getDeprecatedRules'];
 
 const argv = require('yargs')
   .boolean(Object.keys(options))
@@ -35,7 +36,7 @@ const finderOptions = {
 };
 const ruleFinder = getRuleFinder(specifiedFile, finderOptions);
 const errorOut = argv.error && !argv.n;
-let processExitCode = argv.u && errorOut ? 1 : 0;
+let processExitCode = 0;
 
 if (!argv.c && !argv.p && !argv.a && !argv.u && !argv.d) {
   console.log('no option provided, please provide a valid option'); // eslint-disable-line no-console
@@ -63,12 +64,11 @@ Object.keys(options).forEach(option => {
         cli.push(rules);
       }
       cli.write();
-    } else /* istanbul ignore next */ if (option === 'getUnusedRules') {
-      processExitCode = 0;
+      if (errorOut && optionsThatError.indexOf(option) !== -1) {
+        processExitCode = 1;
+      }
     }
   }
 });
 
-if (processExitCode) {
-  process.exit(processExitCode);
-}
+process.exit(processExitCode);
