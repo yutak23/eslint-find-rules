@@ -42,33 +42,32 @@ if (!argv.c && !argv.p && !argv.a && !argv.u && !argv.d) {
   console.log('no option provided, please provide a valid option'); // eslint-disable-line no-console
   console.log('usage:'); // eslint-disable-line no-console
   console.log('eslint-find-rules [option] <file> [flag]'); // eslint-disable-line no-console
-  process.exit(0);
-}
-
-Object.keys(options).forEach(option => {
-  let rules;
-  const ruleFinderMethod = ruleFinder[option];
-  if (argv[option] && ruleFinderMethod) {
-    rules = ruleFinderMethod();
-    if (argv.verbose) {
-      cli.push('\n' + options[option][0] + ' rules\n' + rules.length + ' rules found\n');
-    }
-    if (rules.length > 0) {
+} else {
+  Object.keys(options).forEach(option => {
+    let rules;
+    const ruleFinderMethod = ruleFinder[option];
+    if (argv[option] && ruleFinderMethod) {
+      rules = ruleFinderMethod();
       if (argv.verbose) {
-        rules = rules
-          .map(rule => [rule, getRuleURI(rule).url])
-          .reduce((all, single) => all.concat(single));
-        cli.push(rules, 2, false);
-      } else {
-        cli.push('\n' + options[option][0] + ' rules\n');
-        cli.push(rules);
+        cli.push('\n' + options[option][0] + ' rules\n' + rules.length + ' rules found\n');
       }
-      cli.write();
-      if (errorOut && optionsThatError.indexOf(option) !== -1) {
-        processExitCode = 1;
+      if (rules.length > 0) {
+        if (argv.verbose) {
+          rules = rules
+            .map(rule => [rule, getRuleURI(rule).url])
+            .reduce((all, single) => all.concat(single));
+          cli.push(rules, 2, false);
+        } else {
+          cli.push('\n' + options[option][0] + ' rules\n');
+          cli.push(rules);
+        }
+        if (errorOut && optionsThatError.indexOf(option) !== -1) {
+          processExitCode = 1;
+        }
       }
     }
-  }
-});
+  });
 
+  cli.write();
+}
 process.exit(processExitCode);
