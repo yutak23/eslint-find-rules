@@ -34,7 +34,12 @@ function push(output, columns, uniformColWidths) {
 function write(logger) {
   const _logger = logger || console;
   const _log = _logger.log || /* istanbul ignore next */ console.log; // eslint-disable-line no-console
-  _log(ui.toString());
+  const output = ui.toString();
+
+  // Only log when there is something to show
+  if (output.length > 0) {
+    _log(output);
+  }
 }
 
 function getOutputCellMapper(widths, padding) {
