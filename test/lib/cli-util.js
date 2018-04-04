@@ -19,6 +19,17 @@ describe('cli-util', () => {
     loggerStub.log.restore();
   });
 
+  it('does not print empty lines', () => {
+    const cli = proxyquire('../../src/lib/cli-util', moduleStub);
+
+    // Nothing pushed to cli
+    cli.write(loggerStub);
+
+    assert.ok(
+      loggerStub.log.called === false
+    );
+  });
+
   it('prints out single lines', () => {
     const cli = proxyquire('../../src/lib/cli-util', moduleStub);
 
