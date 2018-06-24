@@ -16,9 +16,13 @@ after_success:
   - npm run travis-after-all
 env:
   matrix:
+   - ESLINT=5
    - ESLINT=4
    - ESLINT=3
 matrix:
   include:
     - node_js: "node"
       env: LINTONLY=true
+  exclude:
+    - node_js: "4"
+      env: ESLINT=5
