@@ -38,6 +38,7 @@
     "yargs": "^8.0.1"
   },
   "devDependencies": {
+    "ajv": "^5 || ^6",
     "all-contributors-cli": "^4.3.0",
     "babel-cli": "^6.24.1",
     "babel-core": "^6.25.0",
@@ -45,7 +46,7 @@
     "codecov": "^2.2.0",
     "commitizen": "^2.9.6",
     "cz-conventional-changelog": "^2.0.0",
-    "eslint": "^3.12.0 || ^4.0.0",
+    "eslint": "^3.12.0 || ^4 || ^5",
     "ghooks": "^2.0.0",
     "mocha": "^3.0.1",
     "npm-run-all": "^4.0.2",
@@ -60,7 +61,7 @@
     "xo": "^0.18.2"
   },
   "peerDependencies": {
-    "eslint": "^3.12.0 || ^4.0.0"
+    "eslint": "^3.12.0 || ^4 || ^5"
   },
   "nyc": {
     "exclude": [
