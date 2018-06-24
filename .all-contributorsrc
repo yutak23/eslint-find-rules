@@ -9,7 +9,10 @@
       "avatar_url": "https://avatars1.githubusercontent.com/u/949380?v=3",
       "profile": "https://twitter.com/sarbbottam",
       "contributions": [
-        "code", "doc", "test", "review"
+        "code",
+        "doc",
+        "test",
+        "review"
       ]
     },
     {
@@ -18,7 +21,10 @@
       "avatar_url": "https://avatars1.githubusercontent.com/u/262436?v=3",
       "profile": "https://twitter.com/ta2edchimp",
       "contributions": [
-        "code", "doc", "test", "review"
+        "code",
+        "doc",
+        "test",
+        "review"
       ]
     },
     {
@@ -27,7 +33,10 @@
       "avatar_url": "https://avatars3.githubusercontent.com/u/1500684?v=3",
       "profile": "https://twitter.com/kentcdodds",
       "contributions": [
-        "code", "doc", "test", "review"
+        "code",
+        "doc",
+        "test",
+        "review"
       ]
     },
     {
@@ -36,7 +45,8 @@
       "avatar_url": "https://avatars1.githubusercontent.com/u/443005?v=3",
       "profile": "https://github.com/scottnonnenberg",
       "contributions": [
-        "code", "test"
+        "code",
+        "test"
       ]
     },
     {
@@ -72,8 +82,25 @@
       "avatar_url": "https://avatars1.githubusercontent.com/u/1406203?v=3",
       "profile": "https://github.com/randycoulman",
       "contributions": [
-        "code", "test"
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "ljharb",
+      "name": "Jordan Harband",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/45469?v=4",
+      "profile": "https://twitter.com/ljharb",
+      "contributions": [
+        "doc",
+        "bug",
+        "code",
+        "question",
+        "review",
+        "test",
+        "infra"
       ]
     }
-  ]
+  ],
+  "repoType": "github"
 }
