@@ -9,6 +9,7 @@ node_js:
   - '4'
 before_script:
   - 'if [ -n "${ESLINT-}" ]; then npm install --no-save "eslint@${ESLINT}"; fi'
+  - 'if [ -n "${AJV-}" ]; then npm install --no-save "ajv@${AJV}"; fi'
   - npm ls > /dev/null
 script:
   - 'if [ -n "${LINTONLY-}" ]; then npm run lint; else npm run cover && npm run check-coverage; fi'
@@ -16,8 +17,8 @@ after_success:
   - npm run travis-after-all
 env:
   matrix:
-   - ESLINT=5
-   - ESLINT=4
+   - ESLINT=5 AJV=6
+   - ESLINT=4 AJV=5
    - ESLINT=3
 matrix:
   include:
@@ -25,4 +26,4 @@ matrix:
       env: LINTONLY=true
   exclude:
     - node_js: "4"
-      env: ESLINT=5
+      env: ESLINT=5 AJV=6
