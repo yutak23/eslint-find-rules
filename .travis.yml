@@ -3,29 +3,22 @@ language: node_js
 notifications:
   email: false
 node_js:
-  - 'node'
-  - '7'
+  - '10'
+  - '8'
   - '6'
   - '4'
 before_script:
-  - 'if [ -n "${TEST_ESLINT_3-}" ]; then npm install eslint@^3.12.0; fi'
-  - npm prune
+  - 'if [ -n "${ESLINT-}" ]; then npm install --no-save "eslint@${ESLINT}"; fi'
+  - npm ls > /dev/null
 script:
   - 'if [ -n "${LINTONLY-}" ]; then npm run lint; else npm run cover && npm run check-coverage; fi'
 after_success:
   - npm run travis-after-all
+env:
+  matrix:
+   - ESLINT=4
+   - ESLINT=3
 matrix:
   include:
     - node_js: "node"
-      env: TEST_ESLINT_3=true
-    - node_js: "7"
-      env: TEST_ESLINT_3=true
-    - node_js: "6"
-      env: TEST_ESLINT_3=true
-    - node_js: "4"
-      env: TEST_ESLINT_3=true
-    - node_js: "node"
       env: LINTONLY=true
-branches:
-  only:
-    - master
