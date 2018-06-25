@@ -1,6 +1,6 @@
 {
   "name": "eslint-find-rules",
-  "version": "3.3.0",
+  "version": "3.3.1",
   "description": "Find built-in ESLint rules you don't have in your custom config.",
   "main": "dist/lib/rule-finder.js",
   "scripts": {
@@ -13,6 +13,7 @@
     "check-coverage": "nyc check-coverage --statements 100 --branches 100 --functions 100 --lines 100",
     "prebuild": "rimraf dist",
     "build": "babel src -d dist",
+    "prepublish": "npm run build",
     "report-coverage": "cat ./coverage/lcov.info | node_modules/.bin/codecov",
     "travis-after-all": "travis-after-all && npm run report-coverage"
   },
