@@ -1,6 +1,6 @@
 {
   "name": "eslint-find-rules",
-  "version": "3.2.3",
+  "version": "3.3.0",
   "description": "Find built-in ESLint rules you don't have in your custom config.",
   "main": "dist/lib/rule-finder.js",
   "scripts": {
@@ -14,7 +14,6 @@
     "prebuild": "rimraf dist",
     "build": "babel src -d dist",
     "report-coverage": "cat ./coverage/lcov.info | node_modules/.bin/codecov",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "travis-after-all": "travis-after-all && npm run report-coverage"
   },
   "bin": {
@@ -54,7 +53,6 @@
     "opt-cli": "^1.1.1",
     "proxyquire": "^1.8.0",
     "rimraf": "^2.6.0",
-    "semantic-release": "^6.3.6",
     "sinon": "^2.3.4",
     "travis-after-all": "^1.4.4",
     "validate-commit-msg": "^2.12.2",
