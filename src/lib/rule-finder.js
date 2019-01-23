@@ -31,16 +31,26 @@ function _getCurrentNamesRules(config) {
 }
 
 function _normalizePluginName(name) {
-  const scopedRegex = /(@[^/]+)\/(.+)/;
+  const scopedRegex = /(@[^/]+)(\/(.+))?/;
   const match = scopedRegex.exec(name);
 
   if (match) {
+    if (match[3]) {
+      // @scoped/name => @scope/eslint-plugin-name
+      return {
+        module: `${match[1]}/eslint-plugin-${match[3]}`,
+        prefix: match[3]
+      };
+    }
+    
+    // @scoped => @scope/eslint-plugin
     return {
-      module: `${match[1]}/eslint-plugin-${match[2]}`,
-      prefix: match[2]
+      module: `${match[1]}/eslint-plugin`,
+      prefix: match[1]
     };
   }
 
+  // name => eslint-plugin-name
   return {
     module: `eslint-plugin-${name}`,
     prefix: name
