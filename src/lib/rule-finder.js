@@ -42,7 +42,7 @@ function _normalizePluginName(name) {
         prefix: match[3]
       };
     }
-    
+
     // @scoped => @scope/eslint-plugin
     return {
       module: `${match[1]}/eslint-plugin`,
@@ -50,7 +50,7 @@ function _normalizePluginName(name) {
     };
   }
 
-  // name => eslint-plugin-name
+  // Name => eslint-plugin-name
   return {
     module: `eslint-plugin-${name}`,
     prefix: name
