@@ -153,11 +153,11 @@ describe('rule-finder', () => {
     const ruleFinder = getRuleFinder(specifiedFileRelative);
     assert.deepEqual(ruleFinder.getUnusedRules(), [
       '@scope/bar-rule',
+      '@scope/scoped-plugin/bar-rule',
       'baz-rule',
       'plugin/bar-rule',
       'plugin/baz-rule',
-      'plugin/foo-rule',
-      'scoped-plugin/bar-rule'
+      'plugin/foo-rule'
     ]);
   });
 
@@ -166,14 +166,14 @@ describe('rule-finder', () => {
     assert.deepEqual(ruleFinder.getUnusedRules(), [
       '@scope/bar-rule',
       '@scope/old-plugin-rule',
+      '@scope/scoped-plugin/bar-rule',
+      '@scope/scoped-plugin/old-plugin-rule',
       'baz-rule',
       'old-rule',
       'plugin/bar-rule',
       'plugin/baz-rule',
       'plugin/foo-rule',
-      'plugin/old-plugin-rule',
-      'scoped-plugin/bar-rule',
-      'scoped-plugin/old-plugin-rule'
+      'plugin/old-plugin-rule'
     ]);
   });
 
@@ -181,9 +181,9 @@ describe('rule-finder', () => {
     const ruleFinder = getRuleFinder(specifiedFileRelative);
     assert.deepEqual(ruleFinder.getCurrentRules(), [
       '@scope/foo-rule',
+      '@scope/scoped-plugin/foo-rule',
       'bar-rule',
-      'foo-rule',
-      'scoped-plugin/foo-rule'
+      'foo-rule'
     ]);
   });
 
@@ -191,9 +191,9 @@ describe('rule-finder', () => {
     const ruleFinder = getRuleFinder(specifiedFileRelative);
     assert.deepEqual(ruleFinder.getCurrentRulesDetailed(), {
       '@scope/foo-rule': [2],
+      '@scope/scoped-plugin/foo-rule': [2],
       'bar-rule': [2],
-      'foo-rule': [2],
-      'scoped-plugin/foo-rule': [2]
+      'foo-rule': [2]
     });
   });
 
@@ -202,11 +202,11 @@ describe('rule-finder', () => {
     assert.deepEqual(ruleFinder.getPluginRules(), [
       '@scope/bar-rule',
       '@scope/foo-rule',
+      '@scope/scoped-plugin/bar-rule',
+      '@scope/scoped-plugin/foo-rule',
       'plugin/bar-rule',
       'plugin/baz-rule',
-      'plugin/foo-rule',
-      'scoped-plugin/bar-rule',
-      'scoped-plugin/foo-rule'
+      'plugin/foo-rule'
     ]);
   });
 
@@ -216,13 +216,13 @@ describe('rule-finder', () => {
       '@scope/bar-rule',
       '@scope/foo-rule',
       '@scope/old-plugin-rule',
+      '@scope/scoped-plugin/bar-rule',
+      '@scope/scoped-plugin/foo-rule',
+      '@scope/scoped-plugin/old-plugin-rule',
       'plugin/bar-rule',
       'plugin/baz-rule',
       'plugin/foo-rule',
-      'plugin/old-plugin-rule',
-      'scoped-plugin/bar-rule',
-      'scoped-plugin/foo-rule',
-      'scoped-plugin/old-plugin-rule'
+      'plugin/old-plugin-rule'
     ]);
   });
 
@@ -233,14 +233,14 @@ describe('rule-finder', () => {
       [
         '@scope/bar-rule',
         '@scope/foo-rule',
+        '@scope/scoped-plugin/bar-rule',
+        '@scope/scoped-plugin/foo-rule',
         'bar-rule',
         'baz-rule',
         'foo-rule',
         'plugin/bar-rule',
         'plugin/baz-rule',
-        'plugin/foo-rule',
-        'scoped-plugin/bar-rule',
-        'scoped-plugin/foo-rule'
+        'plugin/foo-rule'
       ]
     );
   });
@@ -252,11 +252,11 @@ describe('rule-finder', () => {
       [
         '@scope/bar-rule',
         '@scope/foo-rule',
+        '@scope/scoped-plugin/bar-rule',
+        '@scope/scoped-plugin/foo-rule',
         'plugin/bar-rule',
         'plugin/baz-rule',
-        'plugin/foo-rule',
-        'scoped-plugin/bar-rule',
-        'scoped-plugin/foo-rule'
+        'plugin/foo-rule'
       ]
     );
   });
@@ -269,6 +269,9 @@ describe('rule-finder', () => {
         '@scope/bar-rule',
         '@scope/foo-rule',
         '@scope/old-plugin-rule',
+        '@scope/scoped-plugin/bar-rule',
+        '@scope/scoped-plugin/foo-rule',
+        '@scope/scoped-plugin/old-plugin-rule',
         'bar-rule',
         'baz-rule',
         'foo-rule',
@@ -276,10 +279,7 @@ describe('rule-finder', () => {
         'plugin/bar-rule',
         'plugin/baz-rule',
         'plugin/foo-rule',
-        'plugin/old-plugin-rule',
-        'scoped-plugin/bar-rule',
-        'scoped-plugin/foo-rule',
-        'scoped-plugin/old-plugin-rule'
+        'plugin/old-plugin-rule'
       ]
     );
   });
@@ -288,11 +288,11 @@ describe('rule-finder', () => {
     const ruleFinder = getRuleFinder(specifiedFileAbsolute);
     assert.deepEqual(ruleFinder.getUnusedRules(), [
       '@scope/bar-rule',
+      '@scope/scoped-plugin/bar-rule',
       'baz-rule',
       'plugin/bar-rule',
       'plugin/baz-rule',
-      'plugin/foo-rule',
-      'scoped-plugin/bar-rule'
+      'plugin/foo-rule'
     ]);
   });
 
@@ -301,14 +301,14 @@ describe('rule-finder', () => {
     assert.deepEqual(ruleFinder.getUnusedRules(), [
       '@scope/bar-rule',
       '@scope/old-plugin-rule',
+      '@scope/scoped-plugin/bar-rule',
+      '@scope/scoped-plugin/old-plugin-rule',
       'baz-rule',
       'old-rule',
       'plugin/bar-rule',
       'plugin/baz-rule',
       'plugin/foo-rule',
-      'plugin/old-plugin-rule',
-      'scoped-plugin/bar-rule',
-      'scoped-plugin/old-plugin-rule'
+      'plugin/old-plugin-rule'
     ]);
   });
 
@@ -316,9 +316,9 @@ describe('rule-finder', () => {
     const ruleFinder = getRuleFinder(specifiedFileAbsolute);
     assert.deepEqual(ruleFinder.getCurrentRules(), [
       '@scope/foo-rule',
+      '@scope/scoped-plugin/foo-rule',
       'bar-rule',
-      'foo-rule',
-      'scoped-plugin/foo-rule'
+      'foo-rule'
     ]);
   });
 
@@ -326,9 +326,9 @@ describe('rule-finder', () => {
     const ruleFinder = getRuleFinder(specifiedFileAbsolute);
     assert.deepEqual(ruleFinder.getCurrentRulesDetailed(), {
       '@scope/foo-rule': [2],
+      '@scope/scoped-plugin/foo-rule': [2],
       'foo-rule': [2],
-      'bar-rule': [2],
-      'scoped-plugin/foo-rule': [2]
+      'bar-rule': [2]
     });
   });
 
@@ -337,11 +337,11 @@ describe('rule-finder', () => {
     assert.deepEqual(ruleFinder.getPluginRules(), [
       '@scope/bar-rule',
       '@scope/foo-rule',
+      '@scope/scoped-plugin/bar-rule',
+      '@scope/scoped-plugin/foo-rule',
       'plugin/bar-rule',
       'plugin/baz-rule',
-      'plugin/foo-rule',
-      'scoped-plugin/bar-rule',
-      'scoped-plugin/foo-rule'
+      'plugin/foo-rule'
     ]);
   });
 
@@ -351,13 +351,13 @@ describe('rule-finder', () => {
       '@scope/bar-rule',
       '@scope/foo-rule',
       '@scope/old-plugin-rule',
+      '@scope/scoped-plugin/bar-rule',
+      '@scope/scoped-plugin/foo-rule',
+      '@scope/scoped-plugin/old-plugin-rule',
       'plugin/bar-rule',
       'plugin/baz-rule',
       'plugin/foo-rule',
-      'plugin/old-plugin-rule',
-      'scoped-plugin/bar-rule',
-      'scoped-plugin/foo-rule',
-      'scoped-plugin/old-plugin-rule'
+      'plugin/old-plugin-rule'
     ]);
   });
 
@@ -368,14 +368,14 @@ describe('rule-finder', () => {
       [
         '@scope/bar-rule',
         '@scope/foo-rule',
+        '@scope/scoped-plugin/bar-rule',
+        '@scope/scoped-plugin/foo-rule',
         'bar-rule',
         'baz-rule',
         'foo-rule',
         'plugin/bar-rule',
         'plugin/baz-rule',
-        'plugin/foo-rule',
-        'scoped-plugin/bar-rule',
-        'scoped-plugin/foo-rule'
+        'plugin/foo-rule'
       ]
     );
   });
@@ -388,6 +388,9 @@ describe('rule-finder', () => {
         '@scope/bar-rule',
         '@scope/foo-rule',
         '@scope/old-plugin-rule',
+        '@scope/scoped-plugin/bar-rule',
+        '@scope/scoped-plugin/foo-rule',
+        '@scope/scoped-plugin/old-plugin-rule',
         'bar-rule',
         'baz-rule',
         'foo-rule',
@@ -395,10 +398,7 @@ describe('rule-finder', () => {
         'plugin/bar-rule',
         'plugin/baz-rule',
         'plugin/foo-rule',
-        'plugin/old-plugin-rule',
-        'scoped-plugin/bar-rule',
-        'scoped-plugin/foo-rule',
-        'scoped-plugin/old-plugin-rule'
+        'plugin/old-plugin-rule'
       ]
     );
   });
@@ -439,9 +439,9 @@ describe('rule-finder', () => {
     const ruleFinder = getRuleFinder(usingDeprecatedRulesFile);
     assert.deepEqual(ruleFinder.getDeprecatedRules(), [
       '@scope/old-plugin-rule',
+      '@scope/scoped-plugin/old-plugin-rule',
       'old-rule',
-      'plugin/old-plugin-rule',
-      'scoped-plugin/old-plugin-rule'
+      'plugin/old-plugin-rule'
     ]);
   });
 });

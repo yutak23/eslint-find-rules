@@ -39,7 +39,7 @@ function _normalizePluginName(name) {
       // @scoped/name => @scope/eslint-plugin-name
       return {
         module: `${match[1]}/eslint-plugin-${match[3]}`,
-        prefix: match[3]
+        prefix: `${match[1]}/${match[3]}`
       };
     }
 
