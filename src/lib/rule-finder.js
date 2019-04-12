@@ -34,6 +34,7 @@ function _normalizePluginName(name) {
   const scopedRegex = /(@[^/]+)(\/(.+))?/;
   const match = scopedRegex.exec(name);
 
+  /* istanbul ignore if: cannot test this branch in eslint <5  */
   if (match) {
     if (match[3]) {
       // @scoped/name => @scope/eslint-plugin-name
