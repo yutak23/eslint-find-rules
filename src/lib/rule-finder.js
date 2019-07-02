@@ -5,6 +5,7 @@ const glob = require('glob');
 const isAbsolute = require('path-is-absolute');
 const difference = require('./array-diff');
 const getSortedRules = require('./sort-rules');
+const normalizePluginName = require('./normalize-plugin-name');
 
 function _getConfigFile(specifiedFile) {
   if (specifiedFile) {
@@ -39,34 +40,6 @@ function _getCurrentNamesRules(config) {
   return Object.keys(config.rules);
 }
 
-function _normalizePluginName(name) {
-  const scopedRegex = /(@[^/]+)(\/(.+))?/;
-  const match = scopedRegex.exec(name);
-
-  /* istanbul ignore if: cannot test this branch in eslint <5  */
-  if (match) {
-    if (match[3]) {
-      // @scoped/name => @scope/eslint-plugin-name
-      return {
-        module: `${match[1]}/eslint-plugin-${match[3]}`,
-        prefix: `${match[1]}/${match[3]}`
-      };
-    }
-
-    // @scoped => @scope/eslint-plugin
-    return {
-      module: `${match[1]}/eslint-plugin`,
-      prefix: match[1]
-    };
-  }
-
-  // Name => eslint-plugin-name
-  return {
-    module: `eslint-plugin-${name}`,
-    prefix: name
-  };
-}
-
 function _isDeprecated(rule) {
   return rule && rule.meta && rule.meta.deprecated;
 }
@@ -81,7 +54,7 @@ function _getPluginRules(config) {
   /* istanbul ignore else */
   if (plugins) {
     plugins.forEach(plugin => {
-      const normalized = _normalizePluginName(plugin);
+      const normalized = normalizePluginName(plugin);
       const pluginConfig = require(normalized.module);  // eslint-disable-line import/no-dynamic-require
       const rules = pluginConfig.rules === undefined ? {} : pluginConfig.rules;
 
