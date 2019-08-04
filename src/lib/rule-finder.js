@@ -78,6 +78,7 @@ function _notDeprecated(rule) {
 function _getPluginRules(config) {
   const pluginRules = new Map();
   const plugins = config.plugins;
+  /* istanbul ignore else */
   if (plugins) {
     plugins.forEach(plugin => {
       const normalized = _normalizePluginName(plugin);
