@@ -36,7 +36,7 @@ const getRuleFinder = proxyquire('../../src/lib/rule-finder', {
   },
   //
   // This following module override is needed for eslint v6 and over. The module
-  // path that we pass here is literally the one used in eslint (specifially in
+  // path that we pass here is literally the one used in eslint (specifically in
   // eslint/lib/cli-engine/config-array-factory.js)
   //
   // The stock `resolve` method attempts to resolve to a file path the module
@@ -49,12 +49,16 @@ const getRuleFinder = proxyquire('../../src/lib/rule-finder', {
       // the module name, as-is. This is a lie because what we return is not a
       // path, but it is simple, and works. Otherwise, we just call the original
       // `resolve` from the stock module.
-      return ['eslint-plugin-plugin',
+      return [
+        'eslint-plugin-plugin',
         'eslint-plugin-no-rules',
         '@scope/eslint-plugin-scoped-plugin',
-        '@scope/eslint-plugin'].includes(name) ?
-        name :
-        ModuleResolver.resolve(name, relative);
+        '@scope/eslint-plugin',
+        '@scope-with-dash/eslint-plugin-scoped-with-dash-plugin',
+        '@scope-with-dash/eslint-plugin'
+      ].includes(name) ?
+          name :
+          ModuleResolver.resolve(name, relative);
     },
     '@global': true,
     '@noCallThru': true

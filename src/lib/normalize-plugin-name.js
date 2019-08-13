@@ -10,7 +10,16 @@ function _getNormalizer() {
   }
 
   const eslintVersionFunctions = [
-    // eslint 6
+    // eslint >= 6.1.0
+    function () {
+      const normalizer = require('eslint/lib/shared/naming');
+
+      return {
+        normalizePackageName: normalizer.normalizePackageName,
+        getShorthandName: normalizer.getShorthandName
+      };
+    },
+    // eslint 6.0.0 - 6.0.1
     function () {
       const normalizer = require('eslint/lib/cli-engine/naming');
 
