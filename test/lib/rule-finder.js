@@ -173,7 +173,10 @@ const noRulesFile = path.join(process.cwd(), `./test/fixtures/${eslintVersion}/e
 const noDuplicateRulesFiles = `./test/fixtures/${eslintVersion}/eslint-dedupe-plugin-rules.json`;
 const usingDeprecatedRulesFile = path.join(process.cwd(), `./test/fixtures/${eslintVersion}/eslint-with-deprecated-rules.json`);
 
-describe('rule-finder', () => {
+describe('rule-finder', function() {
+  // increase timeout because proxyquire adds a significant delay
+  this.timeout(5000);
+
   afterEach(() => {
     process.cwd = processCwd;
   });
