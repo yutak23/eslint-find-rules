@@ -36,7 +36,7 @@ const getRuleFinder = proxyquire('../../src/lib/rule-finder', {
   },
   //
   // This following module override is needed for eslint v6 and over. The module
-  // path that we pass here is literally the one used in eslint (specifially in
+  // path that we pass here is literally the one used in eslint (specifically in
   // eslint/lib/cli-engine/config-array-factory.js)
   //
   // The stock `resolve` method attempts to resolve to a file path the module
@@ -49,12 +49,16 @@ const getRuleFinder = proxyquire('../../src/lib/rule-finder', {
       // the module name, as-is. This is a lie because what we return is not a
       // path, but it is simple, and works. Otherwise, we just call the original
       // `resolve` from the stock module.
-      return ['eslint-plugin-plugin',
+      return [
+        'eslint-plugin-plugin',
         'eslint-plugin-no-rules',
         '@scope/eslint-plugin-scoped-plugin',
-        '@scope/eslint-plugin'].includes(name) ?
-        name :
-        ModuleResolver.resolve(name, relative);
+        '@scope/eslint-plugin',
+        '@scope-with-dash/eslint-plugin-scoped-with-dash-plugin',
+        '@scope-with-dash/eslint-plugin'
+      ].includes(name) ?
+          name :
+          ModuleResolver.resolve(name, relative);
     },
     '@global': true,
     '@noCallThru': true
@@ -84,6 +88,24 @@ const getRuleFinder = proxyquire('../../src/lib/rule-finder', {
     '@global': true
   },
   '@scope/eslint-plugin': {
+    rules: {
+      'foo-rule': {},
+      'old-plugin-rule': {meta: {deprecated: true}},
+      'bar-rule': {}
+    },
+    '@noCallThru': true,
+    '@global': true
+  },
+  '@scope-with-dash/eslint-plugin-scoped-with-dash-plugin': {
+    rules: {
+      'foo-rule': {},
+      'old-plugin-rule': {meta: {deprecated: true}},
+      'bar-rule': {}
+    },
+    '@noCallThru': true,
+    '@global': true
+  },
+  '@scope-with-dash/eslint-plugin': {
     rules: {
       'foo-rule': {},
       'old-plugin-rule': {meta: {deprecated: true}},
@@ -151,7 +173,10 @@ const noRulesFile = path.join(process.cwd(), `./test/fixtures/${eslintVersion}/e
 const noDuplicateRulesFiles = `./test/fixtures/${eslintVersion}/eslint-dedupe-plugin-rules.json`;
 const usingDeprecatedRulesFile = path.join(process.cwd(), `./test/fixtures/${eslintVersion}/eslint-with-deprecated-rules.json`);
 
-describe('rule-finder', () => {
+describe('rule-finder', function() {
+  // increase timeout because proxyquire adds a significant delay
+  this.timeout(5000);
+
   afterEach(() => {
     process.cwd = processCwd;
   });
@@ -223,6 +248,8 @@ describe('rule-finder', () => {
   it('specifiedFile (relative path) - unused rules', () => {
     const ruleFinder = getRuleFinder(specifiedFileRelative);
     assertDeepEqual(ruleFinder.getUnusedRules(), [
+      '@scope-with-dash/bar-rule',
+      '@scope-with-dash/scoped-with-dash-plugin/bar-rule',
       '@scope/bar-rule',
       '@scope/scoped-plugin/bar-rule',
       'baz-rule',
@@ -235,6 +262,10 @@ describe('rule-finder', () => {
   it('specifiedFile (relative path) - unused rules including deprecated', () => {
     const ruleFinder = getRuleFinder(specifiedFileRelative, {includeDeprecated: true});
     assertDeepEqual(ruleFinder.getUnusedRules(), [
+      '@scope-with-dash/bar-rule',
+      '@scope-with-dash/old-plugin-rule',
+      '@scope-with-dash/scoped-with-dash-plugin/bar-rule',
+      '@scope-with-dash/scoped-with-dash-plugin/old-plugin-rule',
       '@scope/bar-rule',
       '@scope/old-plugin-rule',
       '@scope/scoped-plugin/bar-rule',
@@ -251,6 +282,8 @@ describe('rule-finder', () => {
   it('specifiedFile (relative path) - current rules', () => {
     const ruleFinder = getRuleFinder(specifiedFileRelative);
     assertDeepEqual(ruleFinder.getCurrentRules(), [
+      '@scope-with-dash/foo-rule',
+      '@scope-with-dash/scoped-with-dash-plugin/foo-rule',
       '@scope/foo-rule',
       '@scope/scoped-plugin/foo-rule',
       'bar-rule',
@@ -261,6 +294,8 @@ describe('rule-finder', () => {
   it('specifiedFile (relative path) - current rule config', () => {
     const ruleFinder = getRuleFinder(specifiedFileRelative);
     assertDeepEqual(ruleFinder.getCurrentRulesDetailed(), {
+      '@scope-with-dash/foo-rule': [2],
+      '@scope-with-dash/scoped-with-dash-plugin/foo-rule': [2],
       '@scope/foo-rule': [2],
       '@scope/scoped-plugin/foo-rule': [2],
       'bar-rule': [2],
@@ -271,6 +306,10 @@ describe('rule-finder', () => {
   it('specifiedFile (relative path) - plugin rules', () => {
     const ruleFinder = getRuleFinder(specifiedFileRelative);
     assertDeepEqual(ruleFinder.getPluginRules(), [
+      '@scope-with-dash/bar-rule',
+      '@scope-with-dash/foo-rule',
+      '@scope-with-dash/scoped-with-dash-plugin/bar-rule',
+      '@scope-with-dash/scoped-with-dash-plugin/foo-rule',
       '@scope/bar-rule',
       '@scope/foo-rule',
       '@scope/scoped-plugin/bar-rule',
@@ -284,6 +323,12 @@ describe('rule-finder', () => {
   it('specifiedFile (relative path) - plugin rules including deprecated', () => {
     const ruleFinder = getRuleFinder(specifiedFileRelative, {includeDeprecated: true});
     assertDeepEqual(ruleFinder.getPluginRules(), [
+      '@scope-with-dash/bar-rule',
+      '@scope-with-dash/foo-rule',
+      '@scope-with-dash/old-plugin-rule',
+      '@scope-with-dash/scoped-with-dash-plugin/bar-rule',
+      '@scope-with-dash/scoped-with-dash-plugin/foo-rule',
+      '@scope-with-dash/scoped-with-dash-plugin/old-plugin-rule',
       '@scope/bar-rule',
       '@scope/foo-rule',
       '@scope/old-plugin-rule',
@@ -302,6 +347,10 @@ describe('rule-finder', () => {
     assertDeepEqual(
       ruleFinder.getAllAvailableRules(),
       [
+        '@scope-with-dash/bar-rule',
+        '@scope-with-dash/foo-rule',
+        '@scope-with-dash/scoped-with-dash-plugin/bar-rule',
+        '@scope-with-dash/scoped-with-dash-plugin/foo-rule',
         '@scope/bar-rule',
         '@scope/foo-rule',
         '@scope/scoped-plugin/bar-rule',
@@ -321,6 +370,10 @@ describe('rule-finder', () => {
     assertDeepEqual(
       ruleFinder.getAllAvailableRules(),
       [
+        '@scope-with-dash/bar-rule',
+        '@scope-with-dash/foo-rule',
+        '@scope-with-dash/scoped-with-dash-plugin/bar-rule',
+        '@scope-with-dash/scoped-with-dash-plugin/foo-rule',
         '@scope/bar-rule',
         '@scope/foo-rule',
         '@scope/scoped-plugin/bar-rule',
@@ -337,6 +390,12 @@ describe('rule-finder', () => {
     assertDeepEqual(
       ruleFinder.getAllAvailableRules(),
       [
+        '@scope-with-dash/bar-rule',
+        '@scope-with-dash/foo-rule',
+        '@scope-with-dash/old-plugin-rule',
+        '@scope-with-dash/scoped-with-dash-plugin/bar-rule',
+        '@scope-with-dash/scoped-with-dash-plugin/foo-rule',
+        '@scope-with-dash/scoped-with-dash-plugin/old-plugin-rule',
         '@scope/bar-rule',
         '@scope/foo-rule',
         '@scope/old-plugin-rule',
@@ -358,6 +417,8 @@ describe('rule-finder', () => {
   it('specifiedFile (absolute path) - unused rules', () => {
     const ruleFinder = getRuleFinder(specifiedFileAbsolute);
     assertDeepEqual(ruleFinder.getUnusedRules(), [
+      '@scope-with-dash/bar-rule',
+      '@scope-with-dash/scoped-with-dash-plugin/bar-rule',
       '@scope/bar-rule',
       '@scope/scoped-plugin/bar-rule',
       'baz-rule',
@@ -370,6 +431,10 @@ describe('rule-finder', () => {
   it('specifiedFile (absolute path) - unused rules', () => {
     const ruleFinder = getRuleFinder(specifiedFileAbsolute, {includeDeprecated: true});
     assertDeepEqual(ruleFinder.getUnusedRules(), [
+      '@scope-with-dash/bar-rule',
+      '@scope-with-dash/old-plugin-rule',
+      '@scope-with-dash/scoped-with-dash-plugin/bar-rule',
+      '@scope-with-dash/scoped-with-dash-plugin/old-plugin-rule',
       '@scope/bar-rule',
       '@scope/old-plugin-rule',
       '@scope/scoped-plugin/bar-rule',
@@ -386,6 +451,8 @@ describe('rule-finder', () => {
   it('specifiedFile (absolute path) - current rules', () => {
     const ruleFinder = getRuleFinder(specifiedFileAbsolute);
     assertDeepEqual(ruleFinder.getCurrentRules(), [
+      '@scope-with-dash/foo-rule',
+      '@scope-with-dash/scoped-with-dash-plugin/foo-rule',
       '@scope/foo-rule',
       '@scope/scoped-plugin/foo-rule',
       'bar-rule',
@@ -396,6 +463,8 @@ describe('rule-finder', () => {
   it('specifiedFile (absolute path) - current rule config', () => {
     const ruleFinder = getRuleFinder(specifiedFileAbsolute);
     assertDeepEqual(ruleFinder.getCurrentRulesDetailed(), {
+      '@scope-with-dash/foo-rule': [2],
+      '@scope-with-dash/scoped-with-dash-plugin/foo-rule': [2],
       '@scope/foo-rule': [2],
       '@scope/scoped-plugin/foo-rule': [2],
       'foo-rule': [2],
@@ -406,6 +475,10 @@ describe('rule-finder', () => {
   it('specifiedFile (absolute path) - plugin rules', () => {
     const ruleFinder = getRuleFinder(specifiedFileAbsolute);
     assertDeepEqual(ruleFinder.getPluginRules(), [
+      '@scope-with-dash/bar-rule',
+      '@scope-with-dash/foo-rule',
+      '@scope-with-dash/scoped-with-dash-plugin/bar-rule',
+      '@scope-with-dash/scoped-with-dash-plugin/foo-rule',
       '@scope/bar-rule',
       '@scope/foo-rule',
       '@scope/scoped-plugin/bar-rule',
@@ -419,6 +492,12 @@ describe('rule-finder', () => {
   it('specifiedFile (absolute path) - plugin rules including deprecated', () => {
     const ruleFinder = getRuleFinder(specifiedFileAbsolute, {includeDeprecated: true});
     assertDeepEqual(ruleFinder.getPluginRules(), [
+      '@scope-with-dash/bar-rule',
+      '@scope-with-dash/foo-rule',
+      '@scope-with-dash/old-plugin-rule',
+      '@scope-with-dash/scoped-with-dash-plugin/bar-rule',
+      '@scope-with-dash/scoped-with-dash-plugin/foo-rule',
+      '@scope-with-dash/scoped-with-dash-plugin/old-plugin-rule',
       '@scope/bar-rule',
       '@scope/foo-rule',
       '@scope/old-plugin-rule',
@@ -437,6 +516,10 @@ describe('rule-finder', () => {
     assertDeepEqual(
       ruleFinder.getAllAvailableRules(),
       [
+        '@scope-with-dash/bar-rule',
+        '@scope-with-dash/foo-rule',
+        '@scope-with-dash/scoped-with-dash-plugin/bar-rule',
+        '@scope-with-dash/scoped-with-dash-plugin/foo-rule',
         '@scope/bar-rule',
         '@scope/foo-rule',
         '@scope/scoped-plugin/bar-rule',
@@ -456,6 +539,12 @@ describe('rule-finder', () => {
     assertDeepEqual(
       ruleFinder.getAllAvailableRules(),
       [
+        '@scope-with-dash/bar-rule',
+        '@scope-with-dash/foo-rule',
+        '@scope-with-dash/old-plugin-rule',
+        '@scope-with-dash/scoped-with-dash-plugin/bar-rule',
+        '@scope-with-dash/scoped-with-dash-plugin/foo-rule',
+        '@scope-with-dash/scoped-with-dash-plugin/old-plugin-rule',
         '@scope/bar-rule',
         '@scope/foo-rule',
         '@scope/old-plugin-rule',
@@ -509,6 +598,8 @@ describe('rule-finder', () => {
   it('specifiedFile (absolute path) with deprecated rules - deprecated rules', () => {
     const ruleFinder = getRuleFinder(usingDeprecatedRulesFile);
     assertDeepEqual(ruleFinder.getDeprecatedRules(), [
+      '@scope-with-dash/old-plugin-rule',
+      '@scope-with-dash/scoped-with-dash-plugin/old-plugin-rule',
       '@scope/old-plugin-rule',
       '@scope/scoped-plugin/old-plugin-rule',
       'old-rule',
