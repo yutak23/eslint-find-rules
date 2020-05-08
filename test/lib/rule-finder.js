@@ -5,7 +5,6 @@ const proxyquire = require('proxyquire');
 let ModuleResolver;
 try {
   // eslint 6 and over: load the actual module
-  // eslint-disable-next-line import/no-unresolved
   ModuleResolver = require('eslint/lib/shared/relative-module-resolver');
 } catch (err) {
   if (err.code !== 'MODULE_NOT_FOUND') {

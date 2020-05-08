@@ -12,10 +12,10 @@ function _getConfigFile(specifiedFile) {
     if (isAbsolute(specifiedFile)) {
       return specifiedFile;
     }
-    return path.join(process.cwd(), specifiedFile); // eslint-disable-line import/no-dynamic-require
+    return path.join(process.cwd(), specifiedFile);
   }
   // This is not being called with an arg. Use the package.json `main`
-  return require(path.join(process.cwd(), 'package.json')).main; // eslint-disable-line import/no-dynamic-require
+  return require(path.join(process.cwd(), 'package.json')).main;
 }
 
 function _getConfigs(configFile, files) {
@@ -55,7 +55,7 @@ function _getPluginRules(config) {
   if (plugins) {
     plugins.forEach(plugin => {
       const normalized = normalizePluginName(plugin);
-      const pluginConfig = require(normalized.module);  // eslint-disable-line import/no-dynamic-require
+      const pluginConfig = require(normalized.module);
       const rules = pluginConfig.rules === undefined ? {} : pluginConfig.rules;
 
       Object.keys(rules).forEach(ruleName =>

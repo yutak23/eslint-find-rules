@@ -1,7 +1,5 @@
 /* istanbul ignore file: ignore from coverage because it varies per eslint version */
 
-/* eslint-disable import/no-unresolved */
-
 let eslintNaming;
 
 function _getNormalizer() {
