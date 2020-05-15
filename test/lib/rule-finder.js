@@ -18,7 +18,7 @@ try {
 
 const processCwd = process.cwd;
 
-const eslintVersion = process.env.ESLINT === '3' || process.env.ESLINT === '4' ? '<v5' : 'v5+';
+const eslintVersion = process.env.ESLINT === '3' || process.env.ESLINT === '4' ? 'prior-v5' : 'post-v5';
 const supportsScopedPlugins = process.env.ESLINT !== '3' && process.env.ESLINT !== '4';
 
 const getRuleFinder = proxyquire('../../src/lib/rule-finder', {
