@@ -290,6 +290,35 @@ describe('rule-finder', function() {
     ]);
   });
 
+  it('specifiedFile (relative path) - current rules with ext', () => {
+    const ruleFinder = getRuleFinder(specifiedFileRelative, { ext: ['.json'] });
+    assertDeepEqual(ruleFinder.getCurrentRules(), [
+      '@scope-with-dash/foo-rule',
+      '@scope-with-dash/scoped-with-dash-plugin/foo-rule',
+      '@scope/foo-rule',
+      '@scope/scoped-plugin/foo-rule',
+      'bar-rule',
+      'foo-rule'
+    ]);
+  });
+
+  it('specifiedFile (relative path) - current rules with ext without dot', () => {
+    const ruleFinder = getRuleFinder(specifiedFileRelative, { ext: ['json'] });
+    assertDeepEqual(ruleFinder.getCurrentRules(), [
+      '@scope-with-dash/foo-rule',
+      '@scope-with-dash/scoped-with-dash-plugin/foo-rule',
+      '@scope/foo-rule',
+      '@scope/scoped-plugin/foo-rule',
+      'bar-rule',
+      'foo-rule'
+    ]);
+  });
+
+  it('specifiedFile (relative path) - current rules with ext not found', () => {
+    const ruleFinder = getRuleFinder(specifiedFileRelative, { ext: ['.ts'] });
+    assertDeepEqual(ruleFinder.getCurrentRules(), []);
+  });
+
   it('specifiedFile (relative path) - current rule config', () => {
     const ruleFinder = getRuleFinder(specifiedFileRelative);
     assertDeepEqual(ruleFinder.getCurrentRulesDetailed(), {

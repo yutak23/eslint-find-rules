@@ -37,7 +37,7 @@ function _getConfig(configFile, files) {
 }
 
 function _getCurrentNamesRules(config) {
-  return Object.keys(config.rules);
+  return config.rules ? Object.keys(config.rules) : [];
 }
 
 function _isDeprecated(rule) {
@@ -78,10 +78,30 @@ function _isNotCore(rule) {
   return rule.indexOf('/') !== '-1';
 }
 
-function RuleFinder(specifiedFile, options) {
-  const {omitCore, includeDeprecated} = options;
+function _escapeRegExp(str) {
+  return str.replace(/[\\^$.*+?()[\]{}|]/ug, '\\$&');
+}
+
+function _createExtensionRegExp(extensions) {
+  const normalizedExts = extensions.map(ext => _escapeRegExp(
+    ext.startsWith(".")
+      ? ext.slice(1)
+      : ext
+  ));
+
+  return new RegExp(
+    `.\\.(?:${normalizedExts.join("|")})$`,
+    "u"
+  );
+}
+
+function RuleFinder(specifiedFile, {omitCore, includeDeprecated, ext = ['.js']}) {
   const configFile = _getConfigFile(specifiedFile);
-  const files = glob.sync('**/*.js', {dot: true, matchBase: true});
+
+  const extensionRegExp = _createExtensionRegExp(ext);
+  const files = glob.sync(`**/*`, {dot: true, matchBase: true})
+    .filter(file => extensionRegExp.test(file));
+
   const config = _getConfig(configFile, files);
   let currentRuleNames = _getCurrentNamesRules(config);
   if (omitCore) {
