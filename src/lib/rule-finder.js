@@ -79,7 +79,7 @@ function _isNotCore(rule) {
 }
 
 function _escapeRegExp(str) {
-  return str.replace(/[\\^$.*+?()[\]{}|]/ug, '\\$&');
+  return str.replace(/[\\^$.*+?()[\]{}|]/g, '\\$&');
 }
 
 function _createExtensionRegExp(extensions) {
@@ -89,10 +89,7 @@ function _createExtensionRegExp(extensions) {
       : ext
   ));
 
-  return new RegExp(
-    `.\\.(?:${normalizedExts.join("|")})$`,
-    "u"
-  );
+  return new RegExp(`.\\.(?:${normalizedExts.join("|")})$`);
 }
 
 function RuleFinder(specifiedFile, {omitCore, includeDeprecated, ext = ['.js']}) {
