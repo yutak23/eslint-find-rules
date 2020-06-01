@@ -84,9 +84,7 @@ function _escapeRegExp(str) {
 
 function _createExtensionRegExp(extensions) {
   const normalizedExts = extensions.map(ext => _escapeRegExp(
-    ext.startsWith(".")
-      ? ext.slice(1)
-      : ext
+    ext.startsWith('.') ? ext.slice(1) : ext
   ));
 
   return new RegExp(`.\\.(?:${normalizedExts.join("|")})$`);
