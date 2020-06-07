@@ -87,6 +87,23 @@ describe('bin', () => {
     assert.equal(exitStatus, 0);
   });
 
+  it('option -a along with --ext', () => {
+    process.argv[2] = '-a';
+    process.argv[3] = '--ext .json';
+    proxyquire('../../src/bin/find', stub);
+    assert.ok(getAllAvailableRules.called);
+    assert.equal(exitStatus, 0);
+  });
+
+  it('option -a along with multi --ext', () => {
+    process.argv[2] = '-a';
+    process.argv[3] = '--ext .js';
+    process.argv[4] = '--ext .json';
+    proxyquire('../../src/bin/find', stub);
+    assert.ok(getAllAvailableRules.called);
+    assert.equal(exitStatus, 0);
+  });
+
   it('option -u|--unused', () => {
     process.argv[2] = '-u';
     proxyquire('../../src/bin/find', stub);

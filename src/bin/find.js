@@ -22,6 +22,10 @@ const argv = require('yargs')
     choices: ['deprecated'],
     type: 'string'
   })
+  .option('ext', {
+    type: 'array',
+    default: ['.js']
+  })
   .default('error', true)
   .default('core', true)
   .argv;
@@ -32,7 +36,8 @@ const cli = require('../lib/cli-util');
 const specifiedFile = argv._[0];
 const finderOptions = {
   omitCore: !argv.core,
-  includeDeprecated: argv.include === 'deprecated'
+  includeDeprecated: argv.include === 'deprecated',
+  ext: argv.ext
 };
 const ruleFinder = getRuleFinder(specifiedFile, finderOptions);
 const errorOut = argv.error && !argv.n;
