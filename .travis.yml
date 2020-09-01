@@ -27,6 +27,8 @@ matrix:
   include:
     - node_js: "node"
       env: LINTONLY=true
+    - node_js: "14"
+      env: ESLINT=7.7
     - node_js: "8"
       env: ESLINT=6
     - node_js: "8"
