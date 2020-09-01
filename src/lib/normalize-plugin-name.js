@@ -8,6 +8,25 @@ function _getNormalizer() {
   }
 
   const eslintVersionFunctions = [
+    // eslint >= 7.0.0
+    function () {
+      const ESLintExports = require('eslint');
+
+      const version = ESLintExports.ESLint.version;
+
+      if (!version) {
+        throw new Error('Unable to find eslint version');
+      }
+
+      const ESLintRC = require('@eslint/eslintrc');
+
+      const naming = ESLintRC.Legacy.naming;
+
+      return {
+        normalizePackageName: naming.normalizePackageName,
+        getShorthandName: naming.getShorthandName
+      }
+    },
     // eslint >= 6.1.0
     function () {
       const normalizer = require('eslint/lib/shared/naming');
