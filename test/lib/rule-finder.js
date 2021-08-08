@@ -4,22 +4,51 @@ const proxyquire = require('proxyquire');
 
 let ModuleResolver;
 try {
-  // eslint 6 and over: load the actual module
-  ModuleResolver = require('eslint/lib/shared/relative-module-resolver');
+  // eslint 7.12+
+  ModuleResolver = require('@eslint/eslintrc/lib/shared/relative-module-resolver');
 } catch (err) {
   if (err.code !== 'MODULE_NOT_FOUND') {
     throw err;
   }
-  // eslint < 6: ModuleResolver is `undefined`, which is okay. The proxyquire
-  // override for ../shared/relative-module-resolver won't be used because
-  // eslint < 6 does not have that module and so does not try to load it.
-  ModuleResolver = undefined;
+  try {
+    // eslint v6 - v7.11: load the actual module
+    ModuleResolver = require('eslint/lib/shared/relative-module-resolver');
+  } catch (err) {
+    if (err.code !== 'MODULE_NOT_FOUND') {
+      throw err;
+    }
+    // eslint < 6: ModuleResolver is `undefined`, which is okay. The proxyquire
+    // override for ../shared/relative-module-resolver won't be used because
+    // eslint < 6 does not have that module and so does not try to load it.
+    ModuleResolver = undefined;
+  }
 }
 
 const processCwd = process.cwd;
 
 const eslintVersion = process.env.ESLINT === '3' || process.env.ESLINT === '4' ? 'prior-v5' : 'post-v5';
 const supportsScopedPlugins = process.env.ESLINT !== '3' && process.env.ESLINT !== '4';
+
+const moduleResolver = {
+  resolve(name, relative) {
+    // The strategy is simple: if called with one of our plugins, just return
+    // the module name, as-is. This is a lie because what we return is not a
+    // path, but it is simple, and works. Otherwise, we just call the original
+    // `resolve` from the stock module.
+    return [
+      'eslint-plugin-plugin',
+      'eslint-plugin-no-rules',
+      '@scope/eslint-plugin-scoped-plugin',
+      '@scope/eslint-plugin',
+      '@scope-with-dash/eslint-plugin-scoped-with-dash-plugin',
+      '@scope-with-dash/eslint-plugin'
+    ].includes(name) ?
+        name :
+        ModuleResolver.resolve(name, relative);
+  },
+  '@global': true,
+  '@noCallThru': true
+};
 
 const getRuleFinder = proxyquire('../../src/lib/rule-finder', {
   eslint: {
@@ -42,26 +71,8 @@ const getRuleFinder = proxyquire('../../src/lib/rule-finder', {
   // name passed in `name` relative to the path in `relative`. We have to
   // override that function, otherwise eslint fails to "load" our plugins.
   //
-  '../shared/relative-module-resolver': {
-    resolve(name, relative) {
-      // The strategy is simple: if called with one of our plugins, just return
-      // the module name, as-is. This is a lie because what we return is not a
-      // path, but it is simple, and works. Otherwise, we just call the original
-      // `resolve` from the stock module.
-      return [
-        'eslint-plugin-plugin',
-        'eslint-plugin-no-rules',
-        '@scope/eslint-plugin-scoped-plugin',
-        '@scope/eslint-plugin',
-        '@scope-with-dash/eslint-plugin-scoped-with-dash-plugin',
-        '@scope-with-dash/eslint-plugin'
-      ].includes(name) ?
-          name :
-          ModuleResolver.resolve(name, relative);
-    },
-    '@global': true,
-    '@noCallThru': true
-  },
+  '../shared/relative-module-resolver': moduleResolver, // in eslint < 7.12, from eslint/lib/cli-engine/config-array-factory.js
+  './shared/relative-module-resolver': moduleResolver, // in eslint 7.12+, from @eslint/eslintrc/lib/config-array-factory.js
   'eslint-plugin-plugin': {
     rules: {
       'foo-rule': {},
@@ -132,6 +143,15 @@ function assertDeepEqual(a, b) {
   return assert.deepEqual(a, bWithoutScoped);
 }
 
+const dedupeModuleResolver = {
+  resolve(name, relative) {
+    return name === 'eslint-plugin-plugin' ?
+      name :
+      ModuleResolver.resolve(name, relative);
+  },
+  '@global': true,
+  '@noCallThru': true
+};
 const getRuleFinderForDedupeTests = proxyquire('../../src/lib/rule-finder', {
   eslint: {
     linter: {
@@ -144,17 +164,9 @@ const getRuleFinderForDedupeTests = proxyquire('../../src/lib/rule-finder', {
       }
     }
   },
-  // See the long comment in `getRuleFinder` above to learn what the point of
-  // this override is.
-  '../shared/relative-module-resolver': {
-    resolve(name, relative) {
-      return name === 'eslint-plugin-plugin' ?
-        name :
-        ModuleResolver.resolve(name, relative);
-    },
-    '@global': true,
-    '@noCallThru': true
-  },
+  // See the long comment in `getRuleFinder` above to learn what the point of this override is.
+  '../shared/relative-module-resolver': dedupeModuleResolver, // in eslint < 7.12, from eslint/lib/cli-engine/config-array-factory.js
+  './shared/relative-module-resolver': dedupeModuleResolver, // in eslint 7.12+, from @eslint/eslintrc/lib/config-array-factory.js
   'eslint-plugin-plugin': {
     rules: {
       'duplicate-foo-rule': {},
