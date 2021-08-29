@@ -17,8 +17,10 @@ const getSortedRules = require('../lib/sort-rules');
 const flattenRulesDiff = require('../lib/flatten-rules-diff');
 const stringifyRuleConfig = require('../lib/stringify-rule-config');
 
+(async function () {
+
 const files = [argv._[0], argv._[1]];
-const collectedRules = getFilesToCompare(files).map(compareConfigs);
+const collectedRules = await Promise.all(getFilesToCompare(files).map(compareConfigs));
 
 const rulesCount = collectedRules.reduce(
   (prev, curr) => {
@@ -66,13 +68,14 @@ function getFilesToCompare(allFiles) {
   return filesToCompare;
 }
 
-function compareConfigs(currentFiles) {
+async function compareConfigs(currentFiles) {
+  const ruleFinders = await Promise.all(currentFiles.slice(0, 2).map(getRuleFinder));
   return {
     config1: path.basename(currentFiles[0]),
     config2: path.basename(currentFiles[1]),
     rules: rulesDifference(
-      getRuleFinder(currentFiles[0]),
-      getRuleFinder(currentFiles[1])
+      ruleFinders[0],
+      ruleFinders[1]
     )
   };
 }
@@ -94,3 +97,10 @@ function rulesDifference(a, b) {
     )
   );
 }
+
+process.exit(0);
+
+})().catch(/* istanbul ignore next */(e) => {
+  console.error(e);
+  process.exit(1);
+});
