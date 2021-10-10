@@ -26,8 +26,10 @@ try {
 
 const processCwd = process.cwd;
 
-const eslintVersion = process.env.ESLINT === '3' || process.env.ESLINT === '4' ? 'prior-v5' : 'post-v5';
-const supportsScopedPlugins = process.env.ESLINT !== '3' && process.env.ESLINT !== '4';
+const eslintPkg = require('eslint/package.json');
+const semver = require('semver');
+const eslintVersion = semver.satisfies(eslintPkg.version, '< 5') ? 'prior-v5' : 'post-v5';
+const supportsScopedPlugins = semver.satisfies(eslintPkg.version, '>= 5');
 
 const moduleResolver = {
   resolve(name, relative) {

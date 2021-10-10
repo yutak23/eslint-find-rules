@@ -1,0 +1,83 @@
+name: 'Tests: node.js'
+
+on: [pull_request, push]
+
+jobs:
+  matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      majors: ${{ steps.set-matrix.outputs.requireds }}
+    steps:
+      - uses: ljharb/actions/node/matrix@main
+        id: set-matrix
+        with:
+          versionsAsRoot: true
+          type: 'majors'
+          preset: '>=10'
+
+  majors:
+    needs: [matrix]
+    name: 'latest majors'
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ${{ fromJson(needs.matrix.outputs.majors) }}
+        eslint:
+          - 7
+          - 6
+          - 5
+          - 4
+          - 3
+        include:
+          - node-version: 14
+            eslint: 7.7
+          - node-version: 8
+            eslint: 6
+          - node-version: 8
+            eslint: 5
+          - node-version: 8
+            eslint: 4
+          - node-version: 8
+            eslint: 3
+          - node-version: 6
+            eslint: 5
+            ajv: 5
+          - node-version: 6
+            eslint: 4
+          - node-version: 6
+            eslint: 3
+          - node-version: 4
+            eslint: 4
+          - node-version: 4
+            eslint: 3
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ljharb/actions/node/install@main
+        name: 'nvm install ${{ matrix.node-version }} && npm install'
+        with:
+          node-version: ${{ matrix.node-version }}
+          skip-ls-check: true
+      - run: npm install --no-save eslint@${{ matrix.eslint }}
+      - run: npm install --no-save "ajv@${{ matrix.ajv }}"
+        if: ${{ !!matrix.ajv }}
+      - run: npm install --no-save "ajv@5"
+        if: ${{ !matrix.ajv && matrix.eslint == 4 }}
+      - run: npm install --no-save "ajv@6"
+        if: ${{ !matrix.ajv && matrix.eslint == 5 }}
+      - run: npm prune > /dev/null
+      - run: npm ls > /dev/null
+      - run: npm uninstall --no-save @eslint/eslintrc
+        if: ${{ matrix.eslint < 7 || matrix.eslint == 7.7 }} # < 7.12, actually
+      - run: npm run cover
+      - run: npm run check-coverage
+      - uses: codecov/codecov-action@v2
+
+  node:
+    name: 'node 10+'
+    needs: [majors]
+    runs-on: ubuntu-latest
+    steps:
+      - run: 'echo tests completed'
