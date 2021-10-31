@@ -69,8 +69,6 @@ jobs:
         if: ${{ !matrix.ajv && matrix.eslint == 5 }}
       - run: npm prune > /dev/null
       - run: npm ls > /dev/null
-      - run: npm uninstall --no-save @eslint/eslintrc
-        if: ${{ matrix.eslint < 7 || matrix.eslint == 7.7 }} # < 7.12, actually
       - run: npm run cover
       - uses: codecov/codecov-action@v2
 

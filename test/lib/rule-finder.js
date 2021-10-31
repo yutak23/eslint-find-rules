@@ -2,10 +2,17 @@ const path = require('path');
 const assert = require('assert');
 const proxyquire = require('proxyquire');
 
+const semver = require('semver');
+const eslintPkg = require('eslint/package.json');
+
 let ModuleResolver;
 try {
-  // eslint 7.12+
-  ModuleResolver = require('@eslint/eslintrc/lib/shared/relative-module-resolver');
+  if (semver.satisfies(eslintPkg.version, '>= 7.12')) {
+    // eslint 7.12+
+    ModuleResolver = require('@eslint/eslintrc/lib/shared/relative-module-resolver');
+  } else {
+    throw { code: 'MODULE_NOT_FOUND' };
+  }
 } catch (err) {
   if (err.code !== 'MODULE_NOT_FOUND') {
     throw err;
@@ -26,8 +33,6 @@ try {
 
 const processCwd = process.cwd;
 
-const eslintPkg = require('eslint/package.json');
-const semver = require('semver');
 const eslintVersion = semver.satisfies(eslintPkg.version, '< 5') ? 'prior-v5' : 'post-v5';
 const supportsScopedPlugins = semver.satisfies(eslintPkg.version, '>= 5');
 
