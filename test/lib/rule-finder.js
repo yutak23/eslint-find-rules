@@ -193,7 +193,7 @@ const usingDeprecatedRulesFile = path.join(process.cwd(), `./test/fixtures/${esl
 
 describe('rule-finder', function() {
   // increase timeout because proxyquire adds a significant delay
-  this.timeout(5000);
+  this.timeout(semver.satisfies(process.version, '> 10') ? 5e3 : (semver.satisfies(process.version, '> 4') ? 20e3 : 30e3));
 
   afterEach(() => {
     process.cwd = processCwd;
