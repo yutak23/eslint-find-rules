@@ -5,10 +5,7 @@
     "node": true
   },
   "parserOptions": {
-    "ecmaFeatures": {
-      "impliedStrict": true
-    },
-    "ecmaVersion": 2017
+    "ecmaVersion": 2018
   },
   "plugins": ["json"],
   "root": true

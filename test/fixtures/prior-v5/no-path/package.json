@@ -1,7 +1,0 @@
-{
-  "name": "fake-project",
-  "version": "0.0.0",
-  "description": "Simulating a project's package.json.",
-  "private": true,
-  "main": "./index.js"
-}
