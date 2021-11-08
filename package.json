@@ -3,6 +3,10 @@
   "version": "3.6.1",
   "description": "Find built-in ESLint rules you don't have in your custom config.",
   "main": "dist/lib/rule-finder.js",
+  "exports": {
+    ".": "./dist/lib/rule-finder.js",
+    "./package.json": "./package.json"
+  },
   "scripts": {
     "cover": "nyc --reporter=lcov --reporter=text --reporter=html npm run tests-only",
     "lint": "eslint --ext .js,.json .",
