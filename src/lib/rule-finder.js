@@ -142,6 +142,6 @@ async function createRuleFinder(specifiedFile, options) {
   return new RuleFinder(config, options);
 }
 
-module.exports = function (specifiedFile, options = {}) {
+module.exports = async function (specifiedFile, options = {}) {
   return createRuleFinder(specifiedFile, options);
 };

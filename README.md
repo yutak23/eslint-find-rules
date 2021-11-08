@@ -98,7 +98,7 @@ var getRuleFinder = require('./eslint-find-rules')
 var ruleFinder = getRuleFinder('path/to/eslint-config')
 
 // default to the `main` in your `package.json`
-// var ruleFinder = getRuleFinder()
+// var ruleFinder = await getRuleFinder()
 
 // get all the current, plugin, available and unused rules
 // without referring the extended files or documentation
