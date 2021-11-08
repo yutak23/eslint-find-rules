@@ -1,6 +1,6 @@
 const path = require('path');
 
-const eslint = require('eslint');
+const { ESLint, Linter } = require('eslint');
 const glob = require('glob');
 const difference = require('./array-diff');
 const getSortedRules = require('./sort-rules');
@@ -17,32 +17,16 @@ function _getConfigFile(specifiedFile) {
   return require(path.join(process.cwd(), 'package.json')).main;
 }
 
-async function _getConfigs(configFile, files) {
-  let isPathIgnored;
-  let getConfigForFile;
-
-  if (eslint.ESLint) {
-    const esLint = new eslint.ESLint({
-      // Ignore any config applicable depending on the location on the filesystem
-      useEslintrc: false,
-      // Point to the particular config
-      overrideConfigFile: configFile
-    });
-    isPathIgnored = esLint.isPathIgnored.bind(esLint);
-    getConfigForFile = esLint.calculateConfigForFile.bind(esLint);
-  } else {
-    const cliEngine = new eslint.CLIEngine({
-      // Ignore any config applicable depending on the location on the filesystem
-      useEslintrc: false,
-      // Point to the particular config
-      configFile
-    });
-    isPathIgnored = cliEngine.isPathIgnored.bind(cliEngine);
-    getConfigForFile = cliEngine.getConfigForFile.bind(cliEngine);
-  }
+async function _getConfigs(overrideConfigFile, files) {
+  const esLint = new ESLint({
+    // Ignore any config applicable depending on the location on the filesystem
+    useEslintrc: false,
+    // Point to the particular config
+    overrideConfigFile
+  });
 
   const configs = files.map(async filePath => (
-    await isPathIgnored(filePath) ? false : getConfigForFile(filePath)
+    await esLint.isPathIgnored(filePath) ? false : esLint.calculateConfigForFile(filePath)
   ));
   return new Set((await Promise.all(configs)).filter(Boolean));
 }
@@ -84,7 +68,7 @@ function _getPluginRules(config) {
 }
 
 function _getCoreRules() {
-  return (eslint.Linter ? new eslint.Linter() : eslint.linter).getRules();
+  return new Linter().getRules();
 }
 
 function _filterRuleNames(ruleNames, rules, predicate) {
