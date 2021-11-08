@@ -2,14 +2,13 @@ const path = require('path');
 
 const eslint = require('eslint');
 const glob = require('glob');
-const isAbsolute = require('path-is-absolute');
 const difference = require('./array-diff');
 const getSortedRules = require('./sort-rules');
 const normalizePluginName = require('./normalize-plugin-name');
 
 function _getConfigFile(specifiedFile) {
   if (specifiedFile) {
-    if (isAbsolute(specifiedFile)) {
+    if (path.isAbsolute(specifiedFile)) {
       return specifiedFile;
     }
     return path.join(process.cwd(), specifiedFile);
