@@ -147,6 +147,7 @@ const specifiedFileAbsolute = path.join(process.cwd(), specifiedFileRelative);
 const noRulesFile = path.join(process.cwd(), `./test/fixtures/${eslintVersion}/eslint-with-plugin-with-no-rules.json`);
 const noDuplicateRulesFiles = `./test/fixtures/${eslintVersion}/eslint-dedupe-plugin-rules.json`;
 const usingDeprecatedRulesFile = path.join(process.cwd(), `./test/fixtures/${eslintVersion}/eslint-with-deprecated-rules.json`);
+const usingWithOverridesFile = path.join(process.cwd(), `./test/fixtures/${eslintVersion}/eslint-with-overrides.json`);
 
 describe('rule-finder', function() {
   // increase timeout because proxyquire adds a significant delay
@@ -610,4 +611,22 @@ describe('rule-finder', function() {
       'plugin/old-plugin-rule'
     ]);
   });
+
+  it('check overrides - unused rules', async () => {
+    const ruleFinder = await getRuleFinder(usingWithOverridesFile, {'ext': ['.txt', '.json']});
+    assert.deepEqual(ruleFinder.getUnusedRules(), [
+      "@scope-with-dash/bar-rule",
+      "@scope-with-dash/foo-rule",
+      "@scope-with-dash/scoped-with-dash-plugin/bar-rule",
+      "@scope-with-dash/scoped-with-dash-plugin/foo-rule",
+      "@scope/bar-rule",
+      "@scope/scoped-plugin/bar-rule",
+      "bar-rule",
+      "baz-rule",
+      "plugin/bar-rule",
+      "plugin/baz-rule",
+      "plugin/foo-rule",
+    ]);
+  });
+
 });

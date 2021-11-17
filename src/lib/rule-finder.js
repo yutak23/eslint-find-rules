@@ -33,7 +33,10 @@ async function _getConfigs(overrideConfigFile, files) {
 
 async function _getConfig(configFile, files) {
   return Array.from(await _getConfigs(configFile, files)).reduce((prev, item) => {
-    return Object.assign(prev, item, {rules: Object.assign({}, prev.rules, item.rules)});
+    return Object.assign(prev, item, {
+      rules: Object.assign({}, prev.rules, item.rules),
+      plugins: [...new Set([].concat(prev.plugins || [], item.plugins || []))]
+    });
   }, {});
 }
 
