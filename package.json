@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "all-contributors-cli": "^4.11.2",
-    "aud": "^1.1.5",
+    "aud": "^2.0.4",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-preset-env": "^1.7.0",
@@ -62,7 +62,7 @@
     "opt-cli": "^1.6.0",
     "proxyquire": "^1.8.0",
     "rimraf": "^2.7.1",
-    "semver": "^6.3.0",
+    "semver": "^6.3.1",
     "sinon": "^2.4.1",
     "validate-commit-msg": "^2.14.0"
   },
