@@ -46,7 +46,7 @@ Then run it with: `$ npm run --silent eslint-find-option-rules` (the `--silent` 
 
 ```
 available options are -a|--all-available, -c|--current, -d|--deprecated, -p|--plugin, -u|--unused
-available flags are -n|--no-error, --no-core, -i/--include deprecated, and --ext .js
+available flags are -n|--no-error, --no-core, -i/--include deprecated, --ext .js, and --flatConfig
 ```
 
 By default it will error out only for `-d|--deprecated` and `-u|--unused`,
@@ -57,6 +57,8 @@ By default, core rules will be included in the output of `-a|--all-available`, `
 By default, deprecated rules will be omitted from the output of `-a|--all-available`, `-p|--plugin` and `-u|--unused`.  If you want to report on deprecated rules as well, use the `--include=deprecated` or `-i deprecated` flag.
 
 By default, rules will be searched for files having `.js` extension.  If you want to find rules using another extension (`.json` for example), use the `--ext .json` flag (or `--ext .js --ext .json` if you need multiple extensions).
+
+By default, ESLint will handle configs in Legacy mode. If you want to handle Flat config files, you need to add the `--flatConfig` flag.
 
 **NOTE:** Deprecated rules are found by looking at the metadata of the rule definition.  All core rules and many plugin rules use this flag to indicate deprecated rules.  But if you find a plugin that does not mark their rules as deprecated in the rule metadata, please file a pull request with that project.
 

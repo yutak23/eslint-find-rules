@@ -10,7 +10,8 @@ const options = {
   n: [],
   error: ['error'],
   core: ['core'],
-  verbose: ['verbose', 'v']
+  verbose: ['verbose', 'v'],
+  flatConfig: ['flatConfig']
 };
 const optionsThatError = ['getUnusedRules', 'getDeprecatedRules'];
 
@@ -28,6 +29,7 @@ const argv = require('yargs')
   })
   .default('error', true)
   .default('core', true)
+  .default('flatConfig', false)
   .argv;
 const getRuleURI = require('eslint-rule-documentation');
 const getRuleFinder = require('../lib/rule-finder');
@@ -39,7 +41,8 @@ const specifiedFile = argv._[0];
 const finderOptions = {
   omitCore: !argv.core,
   includeDeprecated: argv.include === 'deprecated',
-  ext: argv.ext
+  ext: argv.ext,
+  useFlatConfig: argv.flatConfig
 };
 const ruleFinder = await getRuleFinder(specifiedFile, finderOptions);
 const errorOut = argv.error && !argv.n;

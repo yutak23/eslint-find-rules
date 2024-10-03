@@ -6,6 +6,26 @@ const difference = require('./array-diff');
 const getSortedRules = require('./sort-rules');
 const normalizePluginName = require('./normalize-plugin-name');
 
+let builtinRules, FlatESLint;
+try {
+  const eslintInternal = require('eslint/use-at-your-own-risk');
+  builtinRules = eslintInternal.builtinRules;
+  FlatESLint = eslintInternal.FlatESLint;
+} catch (e) {}
+
+function _loadEslint(options, useFlatConfig) {
+  if (!useFlatConfig) {
+    // Ignore any config applicable depending on the location on the filesystem
+    options.useEslintrc = false;
+  } else if (!FlatESLint) {
+    throw 'This version of ESLint does not support flat config.';
+  }
+
+  return useFlatConfig
+    ? new FlatESLint(options)
+    : new ESLint(options);
+}
+
 function _getConfigFile(specifiedFile) {
   if (specifiedFile) {
     if (path.isAbsolute(specifiedFile)) {
@@ -17,13 +37,11 @@ function _getConfigFile(specifiedFile) {
   return require(path.join(process.cwd(), 'package.json')).main;
 }
 
-async function _getConfigs(overrideConfigFile, files) {
-  const esLint = new ESLint({
-    // Ignore any config applicable depending on the location on the filesystem
-    useEslintrc: false,
+async function _getConfigs(overrideConfigFile, files, useFlatConfig) {
+  const esLint = _loadEslint({
     // Point to the particular config
     overrideConfigFile
-  });
+  }, useFlatConfig);
 
   const configs = files.map(async filePath => (
     await esLint.isPathIgnored(filePath) ? false : esLint.calculateConfigForFile(filePath)
@@ -31,11 +49,15 @@ async function _getConfigs(overrideConfigFile, files) {
   return new Set((await Promise.all(configs)).filter(Boolean));
 }
 
-async function _getConfig(configFile, files) {
-  return Array.from(await _getConfigs(configFile, files)).reduce((prev, item) => {
+async function _getConfig(configFile, files, useFlatConfig) {
+  return Array.from(await _getConfigs(configFile, files, useFlatConfig)).reduce((prev, item) => {
+    const plugins = useFlatConfig 
+      ? Object.assign({}, prev.plugins, item.plugins)
+      : [...new Set([].concat(prev.plugins || [], item.plugins || []))]
+    
     return Object.assign(prev, item, {
       rules: Object.assign({}, prev.rules, item.rules),
-      plugins: [...new Set([].concat(prev.plugins || [], item.plugins || []))]
+      plugins
     });
   }, {});
 }
@@ -52,26 +74,36 @@ function _notDeprecated(rule) {
   return !_isDeprecated(rule);
 }
 
-function _getPluginRules(config) {
+function _getPluginRules(config, useFlatConfig) {
   const pluginRules = new Map();
   const plugins = config.plugins;
   /* istanbul ignore else */
   if (plugins) {
-    plugins.forEach(plugin => {
-      const normalized = normalizePluginName(plugin);
-      const pluginConfig = require(normalized.module);
-      const rules = pluginConfig.rules === undefined ? {} : pluginConfig.rules;
-
-      Object.keys(rules).forEach(ruleName =>
-        pluginRules.set(`${normalized.prefix}/${ruleName}`, rules[ruleName])
-      );
-    });
+    if (useFlatConfig) {
+      Object.entries(config.plugins)
+        .filter(([, { rules }]) => rules)
+        .forEach(([pluginName, { rules }]) => {
+          Object.keys(rules).forEach(ruleName =>
+            pluginRules.set(`${pluginName}/${ruleName}`, rules[ruleName])
+          );
+        });
+    } else {
+      plugins.forEach(plugin => {
+        const normalized = normalizePluginName(plugin);
+        const pluginConfig = require(normalized.module);
+        if (pluginConfig.rules) {
+          Object.keys(pluginConfig.rules).forEach(ruleName =>
+            pluginRules.set(`${normalized.prefix}/${ruleName}`, pluginConfig.rules[ruleName])
+          );
+        }
+      });
+    }
   }
   return pluginRules;
 }
 
 function _getCoreRules() {
-  return new Linter().getRules();
+  return builtinRules || new Linter().getRules();
 }
 
 function _filterRuleNames(ruleNames, rules, predicate) {
@@ -94,13 +126,13 @@ function _createExtensionRegExp(extensions) {
   return new RegExp(`.\\.(?:${normalizedExts.join("|")})$`);
 }
 
-function RuleFinder(config, {omitCore, includeDeprecated}) {
+function RuleFinder(config, {omitCore, includeDeprecated, useFlatConfig}) {
   let currentRuleNames = _getCurrentNamesRules(config);
   if (omitCore) {
     currentRuleNames = currentRuleNames.filter(_isNotCore);
   }
 
-  const pluginRules = _getPluginRules(config); // eslint-disable-line vars-on-top
+  const pluginRules = _getPluginRules(config, useFlatConfig); // eslint-disable-line vars-on-top
   const coreRules = _getCoreRules();
   const allRules = omitCore ? pluginRules : new Map([...coreRules, ...pluginRules]);
 
@@ -140,7 +172,7 @@ async function createRuleFinder(specifiedFile, options) {
   const files = glob.sync(`**/*`, {dot: true, matchBase: true})
     .filter(file => extensionRegExp.test(file));
 
-  const config = await _getConfig(configFile, files);
+  const config = await _getConfig(configFile, files, options.useFlatConfig);
 
   return new RuleFinder(config, options);
 }
