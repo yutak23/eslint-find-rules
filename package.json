@@ -13,7 +13,7 @@
     "pretest": "npm run lint",
     "tests-only": "mocha --recursive",
     "test": "npm run tests-only",
-    "posttest": "aud --production",
+    "posttest": "npx npm@'>=10.2' audit --production",
     "update-contributors": "all-contributors generate",
     "commit": "git-cz",
     "validate": "npm-run-all --parallel lint cover --sequential check-coverage",
@@ -44,7 +44,6 @@
   },
   "devDependencies": {
     "all-contributors-cli": "^4.11.2",
-    "aud": "^2.0.4",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-preset-env": "^1.7.0",
